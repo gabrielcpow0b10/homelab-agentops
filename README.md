@@ -1,13 +1,38 @@
 # HomeLab AgentOps
 
-**Version:** v0.2 Public / Sanitized  
-**Status:** Active HomeLab operations project  
+**Version:** v0.3 Public Toolkit Preview  
+**Status:** Functional public starter kit for HomeLab diagnostics and safety checks  
 **Focus:** Monitoring, backup, recovery, automation, secure remote operations, and future local AI agents  
 **Author:** Gabriel Cruz
 
 HomeLab AgentOps is a self-hosted infrastructure and operations project built to practice real-world Linux administration, Docker services, NAS-backed documentation, monitoring, backup/recovery workflows, safe automation, and private remote access.
 
 This repository is the **public and sanitized** version of a working private HomeLab. It documents the architecture, operational model, security posture, backup strategy, recovery strategy, and example workflows without exposing private credentials, real tokens, internal logs, real backup archives, or sensitive configuration files.
+
+---
+
+## New in v0.3
+
+v0.3 moves the repository from documentation-only toward a functional public toolkit.
+
+You can now run public-safe helper scripts:
+
+```bash
+git clone https://github.com/gabrielcpow0b10/homelab-agentops.git
+cd homelab-agentops
+bash scripts/halo-doctor.sh
+bash scripts/halo-security-scan.sh
+```
+
+Optional local install:
+
+```bash
+bash install.sh
+halo-doctor
+halo-security-scan
+halo-status-example
+halo-backup-example
+```
 
 ---
 
@@ -72,7 +97,19 @@ Agents          Kiosk View         Recovery     Ollama/Open WebUI
 - Safe maintenance automation using scan, dry-run, and safe-cleanup concepts
 - NAS-safe monitoring behavior to avoid waking storage unnecessarily
 - Public/private documentation separation
-- Preparation for local AI agents and operational automation
+- Preparation for local agents and AI-assisted operations
+
+---
+
+## Functional public scripts
+
+| Script | Purpose |
+|---|---|
+| `scripts/halo-doctor.sh` | Runs a public-safe local diagnostic check for system, Docker, systemd, Tailscale, NAS-safe mode, and repo safety. |
+| `scripts/halo-security-scan.sh` | Scans the public repo for common secret patterns and forbidden file types before publishing. |
+| `scripts/examples/halo-status.example.sh` | Simple sanitized status example. |
+| `scripts/examples/halo-backup.example.sh` | Backup workflow concept example. |
+| `install.sh` | Adds helper commands to `~/.local/bin`. |
 
 ---
 
@@ -84,7 +121,7 @@ This public repository includes:
 - backup and recovery strategy,
 - security model,
 - roadmap,
-- public-safe example scripts,
+- public-safe scripts,
 - and workflow notes that explain how the private system is operated.
 
 This public repository does **not** include:
@@ -163,22 +200,6 @@ The Telegram gateway model is designed as a controlled command layer:
 
 ---
 
-## Example command concepts
-
-The private project uses short operational commands. Public examples are intentionally sanitized:
-
-```bash
-# Run a sanitized health check example
-bash scripts/examples/halo-status.example.sh
-
-# Run a sanitized backup dry-run example
-bash scripts/examples/halo-backup.example.sh --dry-run
-```
-
-The real private environment uses controlled wrappers for monitoring, documentation, maintenance, and Telegram-triggered operations. Those production scripts are not published here.
-
----
-
 ## Safety model
 
 This project follows a conservative HomeLab security posture:
@@ -205,17 +226,19 @@ See [SECURITY.md](SECURITY.md) for the public security model.
 - Public backup and recovery runbooks
 - Security model
 - Example backup workflow
-- Initial public documentation set
+- Functional `halo-doctor` diagnostic script
+- Functional public security scan script
+- Public `.env.example`
+- Basic installer for helper commands
 
 ### Next improvements
 
-- Improve public documentation structure
-- Add more sanitized example scripts
-- Add architecture diagrams
-- Add a central public-safe `halo-status` example
-- Add a Telegram gateway model document
-- Add NAS-safe monitoring documentation
-- Add restore-test documentation
+- Add `halo-status.sh` as a stronger public status command
+- Add `halo-backup-dryrun.sh`
+- Add a local dashboard preview
+- Add GitHub Actions for automated security scan
+- Add cross-platform notes for macOS and Linux
+- Add local AI / MCP readiness documentation
 
 ### Future direction
 
@@ -238,11 +261,17 @@ See [SECURITY.md](SECURITY.md) for the public security model.
 ├── ROADMAP.md
 ├── SECURITY.md
 ├── CHANGELOG.md
+├── .env.example
+├── install.sh
 ├── docs/
 │   ├── project-overview.md
 │   ├── nas-safe-monitoring.md
-│   └── telegram-gateway-model.md
+│   ├── telegram-gateway-model.md
+│   ├── backup-restore-model.md
+│   └── rack-command-center.md
 └── scripts/
+    ├── halo-doctor.sh
+    ├── halo-security-scan.sh
     └── examples/
         ├── halo-backup.example.sh
         └── halo-status.example.sh
@@ -252,7 +281,7 @@ See [SECURITY.md](SECURITY.md) for the public security model.
 
 ## Current status
 
-HomeLab AgentOps is active and evolving. The public repository is intentionally sanitized and documentation-first, with public-safe example scripts added over time. The private HomeLab contains the real operational implementation, while this repository presents the project in a safe, professional, portfolio-ready way.
+HomeLab AgentOps is active and evolving. v0.3 is the first public toolkit preview: it keeps the project sanitized while adding functional scripts that other users can run safely on their own machines.
 
 ---
 
