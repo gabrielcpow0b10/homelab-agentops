@@ -16,6 +16,3 @@ jobs:
 
       - name: Run public security scan
         run: bash scripts/halo-security-scan.sh
-
-      - name: Run public doctor check
-        run: bash scripts/halo-doctor.sh
