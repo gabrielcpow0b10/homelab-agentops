@@ -1,3 +1,6 @@
+# HomeLab AgentOps - public repository ignore rules
+# This repository must stay public/sanitized.
+
 # Secrets and environment files
 .env
 *.env
@@ -5,25 +8,65 @@ telegram.env
 config/telegram.env
 secrets/
 credentials/
+private/
+.private/
 *.key
 *.pem
 *.p12
+*.crt
+*.csr
+*.ovpn
+id_rsa
+id_ed25519
 
-# Private backups and logs
+# Tokens / credential dumps
+*token*
+*secret*
+*credential*
+*.kdbx
+
+# Private backups and archives
 Real_Backups/
 backups/
+backup/
+restore-test/
+*.tar
 *.tar.gz
+*.tgz
 *.zip
+*.7z
+*.rar
+*.bak
+*.backup
+*.dump
+
+# Databases and local state
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+state/
+cache/
+tmp/
+temp/
+
+# Logs and reports
 *.log
 logs/
 reports/private/
+*.out
+*.err
 
 # OS and editor files
 .DS_Store
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# Runtime/temp files
-tmp/
-cache/
+# Python/runtime files
 __pycache__/
+*.pyc
+.venv/
+venv/

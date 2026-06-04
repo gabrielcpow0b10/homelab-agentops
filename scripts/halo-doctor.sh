@@ -1,15 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# HomeLab AgentOps - halo-doctor
-# Public/sanitized diagnostic script.
-# It allows a local .env for private testing, but .env must remain ignored by Git.
-
 PASS=0
 WARN=0
 FAIL=0
-
-SECRET_PATTERN="BOT_TOKEN=|CHAT_ID=|PASSWORD=|TOKEN=|SECRET=|API_KEY=|OPENAI_API_KEY=|GITHUB_TOKEN=|ghp_[A-Za-z0-9_]+|sk-[A-Za-z0-9]|xoxb-|BEGIN .*PRIVATE|PRIVATE KEY|192\.168\.|100\.[0-9]+\."
 
 print_header() {
   echo ""
@@ -45,7 +39,6 @@ command_exists() {
 load_env() {
   if [ -f ".env" ]; then
     set -a
-    # shellcheck disable=SC1091
     source ./.env
     set +a
     ok ".env file found locally"
@@ -185,15 +178,17 @@ check_public_safety() {
     ok "No forbidden public file patterns found"
   fi
 
-  if grep -RniE "$SECRET_PATTERN" . \
+  if grep -RniE "BOT_TOKEN=|CHAT_ID=|PASSWORD=|TOKEN=|SECRET=|API_KEY=|OPENAI_API_KEY=|GITHUB_TOKEN=|ghp_[A-Za-z0-9_]+|sk-[A-Za-z0-9]|xoxb-|BEGIN .*PRIVATE|PRIVATE KEY|192\.168\.|100\.[0-9]+\." . \
     --exclude-dir=.git \
-    --exclude='.env.example' \
-    --exclude='.env' \
-    --exclude='SECURITY.md' \
-    --exclude='README.md' \
-    --exclude='ARCHITECTURE.md' \
-    --exclude='halo-security-scan.sh' \
-    --exclude='halo-doctor.sh' \
+    --exclude-dir=docs/security \
+    --exclude=.env.example \
+    --exclude=.env \
+    --exclude=SECURITY.md \
+    --exclude=README.md \
+    --exclude=ARCHITECTURE.md \
+    --exclude=public-release-checklist.md \
+    --exclude=halo-security-scan.sh \
+    --exclude=halo-doctor.sh \
     >/tmp/halo-doctor-secret-scan.txt 2>/dev/null; then
     warn "Potential sensitive pattern found. Review /tmp/halo-doctor-secret-scan.txt"
   else

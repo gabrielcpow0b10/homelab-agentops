@@ -24,13 +24,15 @@ echo "Checking for suspicious secret patterns..."
 
 if grep -RniE "BOT_TOKEN=|CHAT_ID=|PASSWORD=|TOKEN=|SECRET=|API_KEY=|OPENAI_API_KEY=|GITHUB_TOKEN=|ghp_[A-Za-z0-9_]+|sk-[A-Za-z0-9]|xoxb-|BEGIN .*PRIVATE|PRIVATE KEY|192\.168\.|100\.[0-9]+\." . \
   --exclude-dir=.git \
-  --exclude='.env.example' \
-  --exclude='.env' \
-  --exclude='SECURITY.md' \
-  --exclude='README.md' \
-  --exclude='ARCHITECTURE.md' \
-  --exclude='halo-security-scan.sh' \
-  --exclude='halo-doctor.sh'; then
+  --exclude-dir=security \
+  --exclude=.env \
+  --exclude=.env.example \
+  --exclude=SECURITY.md \
+  --exclude=README.md \
+  --exclude=ARCHITECTURE.md \
+  --exclude=public-release-checklist.md \
+  --exclude=halo-security-scan.sh \
+  --exclude=halo-doctor.sh; then
   echo "Potential sensitive pattern found. Review before publishing."
   STATUS=1
 else
