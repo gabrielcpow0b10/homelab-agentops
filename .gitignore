@@ -1,0 +1,29 @@
+# Secrets and environment files
+.env
+*.env
+telegram.env
+config/telegram.env
+secrets/
+credentials/
+*.key
+*.pem
+*.p12
+
+# Private backups and logs
+Real_Backups/
+backups/
+*.tar.gz
+*.zip
+*.log
+logs/
+reports/private/
+
+# OS and editor files
+.DS_Store
+.vscode/
+.idea/
+
+# Runtime/temp files
+tmp/
+cache/
+__pycache__/
