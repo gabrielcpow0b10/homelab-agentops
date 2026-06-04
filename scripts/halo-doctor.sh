@@ -3,11 +3,13 @@ set -euo pipefail
 
 # HomeLab AgentOps - halo-doctor
 # Public/sanitized diagnostic script.
-# It does not require secrets and does not touch private NAS paths unless configured.
+# It allows a local .env for private testing, but .env must remain ignored by Git.
 
 PASS=0
 WARN=0
 FAIL=0
+
+SECRET_PATTERN="BOT_TOKEN=|CHAT_ID=|PASSWORD=|TOKEN=|SECRET=|API_KEY=|OPENAI_API_KEY=|GITHUB_TOKEN=|ghp_[A-Za-z0-9_]+|sk-[A-Za-z0-9]|xoxb-|BEGIN .*PRIVATE|PRIVATE KEY|192\.168\.|100\.[0-9]+\."
 
 print_header() {
   echo ""
@@ -42,11 +44,17 @@ command_exists() {
 
 load_env() {
   if [ -f ".env" ]; then
-    # shellcheck disable=SC1091
     set -a
+    # shellcheck disable=SC1091
     source ./.env
     set +a
-    ok ".env file found"
+    ok ".env file found locally"
+
+    if git check-ignore .env >/dev/null 2>&1; then
+      ok ".env is ignored by Git"
+    else
+      fail ".env exists but is NOT ignored by Git"
+    fi
   else
     warn ".env file not found; using defaults"
   fi
@@ -54,6 +62,7 @@ load_env() {
 
 check_os() {
   section "System"
+
   if [ -f /etc/os-release ]; then
     . /etc/os-release
     ok "OS detected: ${PRETTY_NAME:-unknown}"
@@ -67,6 +76,7 @@ check_os() {
 
 check_resources() {
   section "Resources"
+
   if command_exists free; then
     free -h | awk 'NR==2 {print "[INFO] Memory: used " $3 " / total " $2}'
     ok "Memory information available"
@@ -84,6 +94,7 @@ check_resources() {
 
 check_docker() {
   section "Docker"
+
   if ! command_exists docker; then
     warn "Docker command not found"
     return
@@ -103,6 +114,7 @@ check_docker() {
 
 check_systemd() {
   section "systemd"
+
   if command_exists systemctl; then
     ok "systemctl available"
   else
@@ -112,8 +124,10 @@ check_systemd() {
 
 check_tailscale() {
   section "Private access tooling"
+
   if command_exists tailscale; then
     ok "Tailscale command found"
+
     if tailscale status >/dev/null 2>&1; then
       ok "Tailscale status command works"
     else
@@ -126,6 +140,7 @@ check_tailscale() {
 
 check_nas_safe() {
   section "NAS-safe mode"
+
   local nas_enabled="${HALO_NAS_ENABLED:-false}"
   local nas_mount="${HALO_NAS_MOUNT:-/mnt/example-nas}"
 
@@ -134,7 +149,6 @@ check_nas_safe() {
     return
   fi
 
-  # Lightweight check only. Do not list or scan inside the NAS path.
   if command_exists mountpoint && mountpoint -q "$nas_mount"; then
     ok "NAS mountpoint appears mounted: $nas_mount"
   else
@@ -146,10 +160,24 @@ check_public_safety() {
   section "Repository safety"
 
   local found_forbidden=false
+
   while IFS= read -r path; do
     found_forbidden=true
     echo "[WARN] Forbidden public file pattern found: $path"
-  done < <(find . -type f \( -name "*.env" -o -name ".env" -o -name "*.tar.gz" -o -name "*.zip" -o -name "*.log" -o -name "*.key" -o -name "*.pem" -o -name "*.p12" \) 2>/dev/null | grep -v '^./.env.example$' || true)
+  done < <(
+    find . -type f \( \
+      -name "*.env" -o \
+      -name ".env" -o \
+      -name "*.tar.gz" -o \
+      -name "*.zip" -o \
+      -name "*.log" -o \
+      -name "*.key" -o \
+      -name "*.pem" -o \
+      -name "*.p12" \
+    \) 2>/dev/null \
+      | grep -v '^./.env.example$' \
+      | grep -v '^./.env$' || true
+  )
 
   if [ "$found_forbidden" = true ]; then
     warn "Review forbidden file patterns before publishing"
@@ -157,7 +185,16 @@ check_public_safety() {
     ok "No forbidden public file patterns found"
   fi
 
-  if grep -RniE "BOT_TOKEN=|CHAT_ID=|PASSWORD=|TOKEN=|SECRET=|API_KEY=|OPENAI_API_KEY=|GITHUB_TOKEN=|ghp_|sk-|xoxb-|BEGIN .*PRIVATE|PRIVATE KEY|192\.168\.|100\.[0-9]+\." . --exclude-dir=.git --exclude='.env.example' >/tmp/halo-doctor-secret-scan.txt 2>/dev/null; then
+  if grep -RniE "$SECRET_PATTERN" . \
+    --exclude-dir=.git \
+    --exclude='.env.example' \
+    --exclude='.env' \
+    --exclude='SECURITY.md' \
+    --exclude='README.md' \
+    --exclude='ARCHITECTURE.md' \
+    --exclude='halo-security-scan.sh' \
+    --exclude='halo-doctor.sh' \
+    >/tmp/halo-doctor-secret-scan.txt 2>/dev/null; then
     warn "Potential sensitive pattern found. Review /tmp/halo-doctor-secret-scan.txt"
   else
     ok "No obvious secret patterns found"
@@ -166,6 +203,7 @@ check_public_safety() {
 
 summary() {
   section "Summary"
+
   echo "Passed:  $PASS"
   echo "Warnings: $WARN"
   echo "Failed:  $FAIL"
