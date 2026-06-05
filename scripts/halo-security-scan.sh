@@ -30,6 +30,8 @@ if grep -RniE "BOT_TOKEN=|CHAT_ID=|PASSWORD=|TOKEN=|SECRET=|API_KEY=|OPENAI_API_
   --exclude=SECURITY.md \
   --exclude=README.md \
   --exclude=ARCHITECTURE.md \
+  --exclude=CHANGELOG.md \
+  --exclude=QUICKSTART.md \
   --exclude=public-release-checklist.md \
   --exclude=halo-security-scan.sh \
   --exclude=halo-doctor.sh; then

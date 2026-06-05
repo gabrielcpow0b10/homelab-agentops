@@ -71,4 +71,4 @@ It includes public-safe explanations, sanitized workflows, example scripts, and 
 
 ## Current public milestone
 
-The current public milestone is a v0.2 sanitized documentation improvement over the initial v0.1 release. The focus is to make the repository clearer, more professional, and more useful for portfolio review.
+The current public milestone is v0.4 Security Hardening. The focus is to keep the repository public-safe while adding functional diagnostics, security checks, automated GitHub Actions validation, and clearer operational documentation.

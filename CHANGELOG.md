@@ -6,6 +6,29 @@ This changelog only tracks the public GitHub version. It does not expose private
 
 ---
 
+## v0.4 Security Hardening
+
+### Added
+
+- Added `halo-doctor.sh` as a public-safe HomeLab diagnostic script.
+- Added `halo-security-scan.sh` for pre-publish repository safety checks.
+- Added `.env.example` for safe local configuration examples.
+- Added `install.sh` to install local helper commands into `~/.local/bin`.
+- Added GitHub Actions workflow to run the public security scan on push and pull request.
+- Added stronger public documentation for NAS-safe monitoring, Telegram gateway design, backup/restore model, and rack command center concepts.
+
+### Security
+
+- Strengthened `.gitignore` to block real `.env` files, credentials, private keys, logs, backups, archives, local state, and private reports.
+- Improved the public/private boundary so the GitHub repository remains sanitized.
+- Kept real tokens, private logs, internal paths, operational backups, and production configuration out of the public repository.
+
+### Status
+
+- Public toolkit is now functional, sanitized, and automatically checked through GitHub Actions.
+
+---
+
 ## v0.2 Public / Sanitized
 
 ### Added
