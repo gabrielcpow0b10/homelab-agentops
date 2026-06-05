@@ -1,6 +1,11 @@
 # HomeLab AgentOps
 
-**Version:** v0.3 Public Toolkit Preview  
+![Security Scan](https://github.com/gabrielcpow0b10/homelab-agentops/actions/workflows/security-scan.yml/badge.svg)
+![Status](https://img.shields.io/badge/status-public%20toolkit%20preview-blue)
+![Security](https://img.shields.io/badge/security-sanitized-green)
+![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Raspberry%20Pi-lightgrey)
+
+**Version:** v0.4 Security Hardening  
 **Status:** Functional public starter kit for HomeLab diagnostics and safety checks  
 **Focus:** Monitoring, backup, recovery, automation, secure remote operations, and future local AI agents  
 **Author:** Gabriel Cruz
@@ -11,9 +16,9 @@ This repository is the **public and sanitized** version of a working private Hom
 
 ---
 
-## New in v0.3
+## New in v0.4
 
-v0.3 moves the repository from documentation-only toward a functional public toolkit.
+v0.4 strengthens the repository as a public toolkit with diagnostics, security checks, GitHub Actions, and a clearer public/private safety boundary.
 
 You can now run public-safe helper scripts:
 
@@ -23,6 +28,8 @@ cd homelab-agentops
 bash scripts/halo-doctor.sh
 bash scripts/halo-security-scan.sh
 ```
+
+For the fastest setup, see [QUICKSTART.md](QUICKSTART.md). For sanitized example output, see [docs/demo-output.md](docs/demo-output.md).
 
 Optional local install:
 
@@ -98,6 +105,17 @@ Agents          Kiosk View         Recovery     Ollama/Open WebUI
 - NAS-safe monitoring behavior to avoid waking storage unnecessarily
 - Public/private documentation separation
 - Preparation for local agents and AI-assisted operations
+
+---
+
+## Current capabilities
+
+- Run public-safe HomeLab diagnostics with `halo-doctor`.
+- Run repository safety checks with `halo-security-scan`.
+- Install helper commands locally with `install.sh`.
+- Validate public safety automatically through GitHub Actions.
+- Document NAS-safe monitoring, backup/recovery, Telegram gateway design, and rack dashboard concepts.
+- Keep a clear boundary between private HomeLab operations and public portfolio-safe documentation.
 
 ---
 
@@ -230,13 +248,13 @@ See [SECURITY.md](SECURITY.md) for the public security model.
 - Functional public security scan script
 - Public `.env.example`
 - Basic installer for helper commands
+- GitHub Actions workflow for automated security scan
 
 ### Next improvements
 
 - Add `halo-status.sh` as a stronger public status command
 - Add `halo-backup-dryrun.sh`
 - Add a local dashboard preview
-- Add GitHub Actions for automated security scan
 - Add cross-platform notes for macOS and Linux
 - Add local AI / MCP readiness documentation
 
@@ -255,6 +273,8 @@ See [SECURITY.md](SECURITY.md) for the public security model.
 ```text
 .
 ├── README.md
+├── QUICKSTART.md
+├── LICENSE
 ├── ARCHITECTURE.md
 ├── BACKUP_RUNBOOK_PUBLIC.md
 ├── RECOVERY_PUBLIC.md
@@ -265,6 +285,7 @@ See [SECURITY.md](SECURITY.md) for the public security model.
 ├── install.sh
 ├── docs/
 │   ├── project-overview.md
+│   ├── demo-output.md
 │   ├── nas-safe-monitoring.md
 │   ├── telegram-gateway-model.md
 │   ├── backup-restore-model.md
@@ -281,7 +302,7 @@ See [SECURITY.md](SECURITY.md) for the public security model.
 
 ## Current status
 
-HomeLab AgentOps is active and evolving. v0.3 is the first public toolkit preview: it keeps the project sanitized while adding functional scripts that other users can run safely on their own machines.
+HomeLab AgentOps is active and evolving. v0.4 is the current public security-hardening milestone: it keeps the project sanitized while adding functional scripts, repository safety checks, and automated GitHub Actions validation.
 
 ---
 
