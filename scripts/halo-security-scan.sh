@@ -1,77 +1,133 @@
 #!/usr/bin/env bash
-set -euo pipefail
 
-echo "== HomeLab AgentOps Security Scan =="
+# HomeLab AgentOps - Public Repository Security Scan
+# Safe for public CI. Scans for real secret leaks, private paths,
+# private network details, and forbidden runtime files.
 
-STATUS=0
+set -u
 
-echo ""
-echo "Checking local .env safety..."
+MODE="${1:-normal}"
+STRICT=0
 
-if [ -f ".env" ]; then
-  if git check-ignore .env >/dev/null 2>&1; then
-    echo "OK: local .env exists and is ignored by Git."
-  else
-    echo "ERROR: .env exists but is NOT ignored by Git."
-    STATUS=1
-  fi
+if [ "$MODE" = "--strict" ] || [ "$MODE" = "strict" ]; then
+  STRICT=1
+  MODE="strict"
 else
-  echo "OK: no local .env file found."
+  MODE="normal"
 fi
 
-echo ""
-echo "Checking for suspicious secret patterns..."
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$ROOT" || exit 1
 
-if grep -RniE "BOT_TOKEN=|CHAT_ID=|PASSWORD=|TOKEN=|SECRET=|API_KEY=|OPENAI_API_KEY=|GITHUB_TOKEN=|ghp_[A-Za-z0-9_]+|sk-[A-Za-z0-9]|xoxb-|BEGIN .*PRIVATE|PRIVATE KEY|192\.168\.|100\.[0-9]+\." . \
-  --exclude-dir=.git \
-  --exclude-dir=security \
-  --exclude=.env \
-  --exclude=.env.example \
-  --exclude=SECURITY.md \
-  --exclude=README.md \
-  --exclude=ARCHITECTURE.md \
-  --exclude=CHANGELOG.md \
-  --exclude=QUICKSTART.md \
-  --exclude=public-release-checklist.md \
-  --exclude=halo-security-scan.sh \
-  --exclude=halo-doctor.sh; then
-  echo "Potential sensitive pattern found. Review before publishing."
-  STATUS=1
+FAIL=0
+
+echo "HomeLab AgentOps Public Security Scan"
+echo "Mode: $MODE"
+echo
+
+mark_fail() {
+  FAIL=1
+}
+
+COMMON_GREP_EXCLUDES=(
+  --exclude-dir=.git
+  --exclude-dir=__pycache__
+  --exclude-dir=.venv
+  --exclude-dir=venv
+  --exclude-dir=node_modules
+  --exclude='*.pyc'
+  --exclude='halo-security-scan.sh'
+)
+
+PLACEHOLDER_FILTER='replace_me|replace_with|placeholder|example|dummy|changeme|your_|disabled|false|null|none|sample|public-safe'
+
+SECRET_REGEX='(BOT_TOKEN|TELEGRAM_BOT_TOKEN|TELEGRAM_TOKEN|ALLOWED_CHAT_ID|CHAT_ID|PASSWORD|PASSWD|SECRET|API_KEY|OPENAI_API_KEY|GITHUB_TOKEN)[[:space:]]*=[[:space:]]*[^|[:space:]#]{8,}|ghp_[A-Za-z0-9_]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk-[A-Za-z0-9]{20,}|xoxb-[A-Za-z0-9-]{20,}|BEGIN[[:space:]]+(RSA |OPENSSH |EC |DSA )?PRIVATE KEY'
+
+PRIVATE_NET_REGEX='(^|[^0-9])(10\.[0-9]{1,3}\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[0-1])\.|100\.[0-9]{1,3}\.)'
+
+PRIVATE_PATH_REGEX='/home/[A-Za-z0-9._-]+|/Users/[A-Za-z0-9._-]+|/mnt/homelab|HomeLab_Control_Center'
+
+echo "===== Secret assignment scan ====="
+SECRET_HITS="$(
+  grep -RInIE "${COMMON_GREP_EXCLUDES[@]}" "$SECRET_REGEX" . 2>/dev/null \
+    | grep -Evi "$PLACEHOLDER_FILTER" || true
+)"
+
+if [ -n "$SECRET_HITS" ]; then
+  echo "$SECRET_HITS"
+  echo "Secret assignment scan: REVIEW REQUIRED"
+  mark_fail
 else
-  echo "OK: no obvious secret patterns found."
+  echo "Secret assignment scan: OK"
 fi
 
-echo ""
-echo "Checking for forbidden public file types..."
+echo
+echo "===== Private network scan ====="
+PRIVATE_NET_HITS="$(
+  grep -RInIE "${COMMON_GREP_EXCLUDES[@]}" "$PRIVATE_NET_REGEX" . 2>/dev/null || true
+)"
 
-FORBIDDEN=$(
-  find . -type f \( \
-    -name "*.env" -o \
+if [ -n "$PRIVATE_NET_HITS" ]; then
+  echo "$PRIVATE_NET_HITS"
+  echo "Private network scan: REVIEW REQUIRED"
+  mark_fail
+else
+  echo "Private network scan: OK"
+fi
+
+echo
+echo "===== Private path scan ====="
+PRIVATE_PATH_HITS="$(
+  grep -RInIE "${COMMON_GREP_EXCLUDES[@]}" "$PRIVATE_PATH_REGEX" . 2>/dev/null || true
+)"
+
+if [ -n "$PRIVATE_PATH_HITS" ]; then
+  echo "$PRIVATE_PATH_HITS"
+  echo "Private path scan: REVIEW REQUIRED"
+  mark_fail
+else
+  echo "Private path scan: OK"
+fi
+
+echo
+echo "===== Forbidden runtime file scan ====="
+FORBIDDEN_FILES="$(
+  find . -path ./.git -prune -o -type f \( \
     -name ".env" -o \
-    -name "*.tar.gz" -o \
-    -name "*.zip" -o \
+    -name "*.env" -o \
+    -name "telegram.env" -o \
     -name "*.log" -o \
     -name "*.key" -o \
     -name "*.pem" -o \
-    -name "*.p12" \
-  \) 2>/dev/null \
-    | grep -v '^./.env.example$' \
-    | grep -v '^./.env$' || true
-)
+    -name "*.p12" -o \
+    -name "*.tar.gz" -o \
+    -name "*.zip" -o \
+    -name "*.bak" -o \
+    -name "*.db" -o \
+    -name "*.sqlite" -o \
+    -name "*.pyc" \
+  \) ! -name ".env.example" ! -name "*.example.env" -print
+)"
 
-if [ -n "$FORBIDDEN" ]; then
-  echo "$FORBIDDEN"
-  echo "Forbidden file pattern found. Review before publishing."
-  STATUS=1
+if [ -n "$FORBIDDEN_FILES" ]; then
+  echo "$FORBIDDEN_FILES"
+  echo "Forbidden runtime file scan: REVIEW REQUIRED"
+  mark_fail
 else
-  echo "OK: no forbidden public file patterns found."
+  echo "Forbidden runtime file scan: OK"
 fi
 
-echo ""
-if [ "$STATUS" -eq 0 ]; then
+if [ "$STRICT" -eq 1 ]; then
+  echo
+  echo "===== Strict mode note ====="
+  echo "Strict mode scanned repository text for real-looking secrets, private paths, private network details, and forbidden runtime files."
+fi
+
+echo
+if [ "$FAIL" -eq 0 ]; then
   echo "Security scan result: GREEN"
+  exit 0
 else
   echo "Security scan result: REVIEW REQUIRED"
+  exit 1
 fi
-
-exit "$STATUS"
