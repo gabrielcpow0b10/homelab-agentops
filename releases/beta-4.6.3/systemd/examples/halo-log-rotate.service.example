@@ -1,0 +1,6 @@
+[Unit]
+Description=Halo HomeLab Log Rotation
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/halo-log-rotate

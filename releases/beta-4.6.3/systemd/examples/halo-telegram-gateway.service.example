@@ -1,0 +1,13 @@
+[Unit]
+Description=Halo Telegram Command Gateway
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 %h/halo-telegram-gateway/halo-telegram-gateway.py
+Restart=always
+RestartSec=10
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+[Install]
+WantedBy=default.target

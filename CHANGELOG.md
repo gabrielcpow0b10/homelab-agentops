@@ -64,3 +64,22 @@ This changelog only tracks the public GitHub version. It does not expose private
 ### Status
 
 - Repository created and pushed to GitHub as the first public HomeLab AgentOps milestone.
+
+## Beta 4.6.3 - Public Sanitized Export
+
+Added a GitHub-ready sanitized public export under `releases/beta-4.6.3/`.
+
+This export documents:
+- Agent Layer upgrade
+- Telegram Gateway hardening
+- Automatic log rotation
+- Stable backup and restore verification
+- Public sanitization checks
+
+Public safety checks completed:
+- No real secrets
+- No private IP/Tailscale details
+- No private paths/usernames
+- No forbidden runtime files
+- Shell examples syntax checked
+- Telegram Gateway Python example compile checked

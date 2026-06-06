@@ -1,0 +1,6 @@
+[Unit]
+Description=Halo FIRE Standby NAS-Safe Report
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/halo-fire
