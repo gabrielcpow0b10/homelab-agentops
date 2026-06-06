@@ -83,3 +83,22 @@ Public safety checks completed:
 - No forbidden runtime files
 - Shell examples syntax checked
 - Telegram Gateway Python example compile checked
+
+## v0.4.1 - Public Security Polish
+
+Improved the public repository polish after the Beta 4.6.3 sanitized release.
+
+### Added
+
+- Expanded `QUICKSTART.md`
+- Added `VERSIONING.md`
+- Added `docs/public-security-hardening.md`
+- Improved `docs/demo-output.md`
+- Added strict mode to `scripts/halo-security-scan.sh`
+
+### Security
+
+- Added normal and strict public security scan modes.
+- Hardened GitHub Actions with read-only repository permissions.
+- Confirmed public/private versioning separation.
+- Kept the repository focused on sanitized documentation and examples only.

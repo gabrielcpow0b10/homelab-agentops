@@ -2,17 +2,26 @@ name: HomeLab AgentOps Security Scan
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+
+permissions:
+  contents: read
 
 jobs:
   security-scan:
+    name: Public repository security scan
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Run public security scan
+      - name: Run normal security scan
         run: bash scripts/halo-security-scan.sh
+
+      - name: Run strict security scan
+        run: bash scripts/halo-security-scan.sh --strict

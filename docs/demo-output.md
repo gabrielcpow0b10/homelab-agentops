@@ -1,14 +1,40 @@
 # Demo Output
 
-This file shows sanitized example output from the public HomeLab AgentOps toolkit.
+Example public-safe output for the HomeLab AgentOps public toolkit.
 
-The exact output may vary depending on the system where the scripts are executed.
+## Security Scan
 
----
+    HomeLab AgentOps Public Security Scan
+    Mode: normal
 
-## halo-security-scan
+    Secret assignment scan: OK
+    Private network scan: OK
+    Private path scan: OK
+    Forbidden runtime file scan: OK
 
-Command:
+    Security scan result: GREEN
 
-```bash
-bash scripts/halo-security-scan.sh
+## Strict Security Scan
+
+    HomeLab AgentOps Public Security Scan
+    Mode: strict
+
+    Secret assignment scan: OK
+    Private network scan: OK
+    Private path scan: OK
+    Forbidden runtime file scan: OK
+
+    Security scan result: GREEN
+
+## Doctor Check
+
+    HomeLab public toolkit check completed
+    Status: OK
+
+## Public Boundary
+
+    No real secrets
+    No private IP or Tailscale details
+    No private paths/usernames
+    No forbidden runtime files
+    Public examples only
