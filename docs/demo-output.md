@@ -28,8 +28,7 @@ Example public-safe output for the HomeLab AgentOps public toolkit.
 
 ## Doctor Check
 
-    HomeLab public toolkit check completed
-    Status: OK
+    Result: GREEN
 
 ## Public Boundary
 
