@@ -1,0 +1,42 @@
+name: Shell Validation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  shell-validation:
+    name: Validate shell scripts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate shell syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mapfile -t files < <(find scripts -type f -name "*.sh" | sort)
+
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No shell scripts found."
+            exit 0
+          fi
+
+          echo "Found ${#files[@]} shell script(s)."
+
+          for file in "${files[@]}"; do
+            echo "Validating: $file"
+            bash -n "$file"
+          done
+
+          echo "Shell validation passed."
