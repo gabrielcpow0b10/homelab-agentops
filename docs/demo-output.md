@@ -1,22 +1,58 @@
 # Demo Output
 
-Example public-safe output for the HomeLab AgentOps public toolkit.
+This document shows sanitized example output from the public HomeLab AgentOps toolkit.
+
+These examples are public-safe. They do not include real IP addresses, hostnames, tokens, chat IDs, NAS paths, credentials, private screenshots, or internal infrastructure details.
+
+## Public Quality Snapshot
+
+HomeLab AgentOps Public Repo
+
+Status: GREEN
+Security Scan: GREEN
+Strict Scan: GREEN
+Doctor: GREEN
+Shell Validation: GREEN
+Release: v0.4.2 published
+Next Gate: v0.4.3 Public Quality Gate
+
+## Doctor Check
+
+Command:
+
+    bash scripts/halo-doctor.sh
+
+Sanitized example output:
+
+    HomeLab AgentOps Doctor
+
+    Checking repository structure...
+    [PASS] Required public files found
+    [PASS] Public documentation found
+    [PASS] Security policy found
+    [PASS] Example environment file found
+    [PASS] Public scripts found
+
+    Running strict public security scan...
+    [PASS] Public security scan passed
+
+    Summary:
+    Passed: 13
+    Warnings: 0
+    Failed: 0
+
+    Result: GREEN
 
 ## Security Scan
 
-    HomeLab AgentOps Public Security Scan
-    Mode: normal
+Command:
 
-    Secret assignment scan: OK
-    Private network scan: OK
-    Private path scan: OK
-    Forbidden runtime file scan: OK
+    bash scripts/halo-security-scan.sh --strict
 
-    Security scan result: GREEN
-
-## Strict Security Scan
+Sanitized example output:
 
     HomeLab AgentOps Public Security Scan
+
     Mode: strict
 
     Secret assignment scan: OK
@@ -26,14 +62,42 @@ Example public-safe output for the HomeLab AgentOps public toolkit.
 
     Security scan result: GREEN
 
-## Doctor Check
+## Shell Validation
 
-    Result: GREEN
+Command:
 
-## Public Boundary
+    find scripts -type f -name "*.sh" -print0 | xargs -0 -n1 bash -n
 
-    No real secrets
-    No private IP or Tailscale details
-    No private paths/usernames
-    No forbidden runtime files
-    Public examples only
+Sanitized example output:
+
+    Shell validation passed.
+
+## Public-Safe Principle
+
+The public repository demonstrates operational structure, security thinking, diagnostics, and recovery discipline without exposing private HomeLab details.
+
+Real production values must stay outside the repository.
+
+Use placeholders such as:
+
+    YOUR_TELEGRAM_BOT_TOKEN
+    YOUR_CHAT_ID
+    your-nas-hostname
+    your-service-url
+    /path/to/example
+
+Do not publish real secrets, real infrastructure maps, real backup archives, or private operational logs.
+
+## What This Demo Proves
+
+This demo output shows that the public repository can provide:
+
+- A repeatable doctor check
+- A strict public security scan
+- Shell syntax validation
+- Public-safe documentation examples
+- A clean quality gate before merging changes
+
+The goal of v0.4.3 is not to expose more infrastructure.
+
+The goal is to improve public quality, validation, and trust while keeping the private HomeLab protected.
