@@ -48,8 +48,7 @@ Expected result:
 
 Expected result:
 
-    HomeLab public toolkit check completed
-    Status: OK
+    Result: GREEN
 
 ## 5. Optional local install
 

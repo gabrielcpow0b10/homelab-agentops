@@ -1,5 +1,20 @@
 # Changelog
 
+## v0.4.2 Doctor Output Consistency
+
+### Fixed
+
+- Aligned `halo-doctor.sh` with the strict public security scan.
+- Removed false-positive documentation warnings from the doctor result.
+- Updated expected public output to use `Result: GREEN`.
+
+### Verified
+
+- `halo-doctor.sh`: GREEN
+- Normal security scan: GREEN
+- Strict security scan: GREEN
+
+
 All notable public/sanitized changes to this repository will be documented here.
 
 This changelog only tracks the public GitHub version. It does not expose private operational logs, private reports, real backups, secrets, or internal production configuration.

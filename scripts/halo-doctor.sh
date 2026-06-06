@@ -49,7 +49,7 @@ load_env() {
       fail ".env exists but is NOT ignored by Git"
     fi
   else
-    warn ".env file not found; using defaults"
+    echo "[INFO] .env file not found; using public defaults"
   fi
 }
 
@@ -150,55 +150,17 @@ check_nas_safe() {
 }
 
 check_public_safety() {
-  section "Repository safety"
-
-  local found_forbidden=false
-
-  while IFS= read -r path; do
-    found_forbidden=true
-    echo "[WARN] Forbidden public file pattern found: $path"
-  done < <(
-    find . -type f \( \
-      -name "*.env" -o \
-      -name ".env" -o \
-      -name "*.tar.gz" -o \
-      -name "*.zip" -o \
-      -name "*.log" -o \
-      -name "*.key" -o \
-      -name "*.pem" -o \
-      -name "*.p12" \
-    \) 2>/dev/null \
-      | grep -v '^./.env.example$' \
-      | grep -v '^./.env$' || true
-  )
-
-  if [ "$found_forbidden" = true ]; then
-    warn "Review forbidden file patterns before publishing"
+section "Repository safety"
+if [ -f scripts/halo-security-scan.sh ]; then
+  if bash scripts/halo-security-scan.sh --strict >/tmp/halo-doctor-security-scan.txt 2>&1; then
+    ok "Public security scan passed"
   else
-    ok "No forbidden public file patterns found"
+    warn "Public security scan requires review. See /tmp/halo-doctor-security-scan.txt"
   fi
+else
+  warn "Public security scan script not found"
+fi
 
-  if grep -RniE "BOT_TOKEN=|CHAT_ID=|PASSWORD=|TOKEN=|SECRET=|API_KEY=|OPENAI_API_KEY=|GITHUB_TOKEN=|ghp_[A-Za-z0-9_]+|sk-[A-Za-z0-9]|xoxb-|BEGIN .*PRIVATE|PRIVATE KEY|192\.168\.|100\.[0-9]+\." . \
-    --exclude-dir=.git \
-    --exclude-dir=docs/security \
-    --exclude=.env.example \
-    --exclude=.env \
-    --exclude=SECURITY.md \
-    --exclude=README.md \
-    --exclude=ARCHITECTURE.md \
-  --exclude=CHANGELOG.md \
-  --exclude=QUICKSTART.md \
-    --exclude=public-release-checklist.md \
-    --exclude=halo-security-scan.sh \
-    --exclude=halo-doctor.sh \
-    >/tmp/halo-doctor-secret-scan.txt 2>/dev/null; then
-    warn "Potential sensitive pattern found. Review /tmp/halo-doctor-secret-scan.txt"
-  else
-    ok "No obvious secret patterns found"
-  fi
-}
-
-summary() {
   section "Summary"
 
   echo "Passed:  $PASS"
@@ -225,4 +187,3 @@ check_systemd
 check_tailscale
 check_nas_safe
 check_public_safety
-summary
