@@ -324,3 +324,59 @@ This project demonstrates how a small HomeLab can grow into a serious infrastruc
 
 **Gabriel Cruz**  
 Physics graduate, Computer Science student, and HomeLab / local AI systems builder.
+
+## Who is this for?
+
+HomeLab AgentOps is designed for:
+
+- self-hosters building small private infrastructure
+- students learning Linux, DevOps, automation, and secure operations
+- Raspberry Pi users running monitoring or dashboard nodes
+- HomeLab builders who want safer backup and recovery habits
+- developers preparing for local AI infrastructure
+- people interested in public-safe automation patterns
+
+The public repository is intentionally sanitized. It demonstrates operational structure, diagnostics, security checks, and recovery discipline without exposing private infrastructure.
+
+## Public Toolkit Commands
+
+The public toolkit includes safe commands that can be tested without private HomeLab access.
+
+    bash scripts/halo-status.sh
+    bash scripts/halo-backup-dryrun.sh
+    bash scripts/halo-security-scan.sh --strict
+    bash scripts/halo-doctor.sh
+
+The status and backup dry-run scripts are public-safe by design:
+
+- no real NAS paths required
+- no Telegram tokens required
+- no private IPs required
+- no `.env` files required
+- no production backup is created
+- no destructive action is performed
+
+Expected public result:
+
+    HALO_PUBLIC_STATUS=GREEN
+    HALO_BACKUP_DRYRUN=OK
+    Security scan result: GREEN
+
+## Public / Private Boundary
+
+This repository must not include private operational data.
+
+Keep private:
+
+- real `.env` files
+- Telegram bot tokens
+- chat IDs
+- NAS credentials
+- private IP maps
+- SSH keys
+- production logs
+- real backup archives
+- private screenshots
+- internal-only runbooks
+
+Use public-safe examples and placeholders instead.
