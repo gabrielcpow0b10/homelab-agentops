@@ -13,8 +13,10 @@ Security Scan: GREEN
 Strict Scan: GREEN
 Doctor: GREEN
 Shell Validation: GREEN
-Release: v0.4.2 published
-Next Gate: v0.4.3 Public Quality Gate
+Public release: v0.5 — Public Toolkit Foundation
+Current quality baseline: GREEN
+
+The repository quality snapshot is separate from the host-specific `halo-status.sh` result. `HALO_PUBLIC_STATUS=GREEN` means no local warnings were detected. `HALO_PUBLIC_STATUS=WARN` means a local condition requires review. Both results remain public-safe and do not require exposing private network, mount, or path details.
 
 ## Doctor Check
 
@@ -98,6 +100,6 @@ This demo output shows that the public repository can provide:
 - Public-safe documentation examples
 - A clean quality gate before merging changes
 
-The goal of v0.4.3 is not to expose more infrastructure.
+Future public improvements should not expose more infrastructure.
 
 The goal is to improve public quality, validation, and trust while keeping the private HomeLab protected.

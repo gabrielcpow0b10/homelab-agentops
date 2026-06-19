@@ -1,37 +1,28 @@
 # Versioning Model
 
-This repository uses two version tracks.
+## Public GitHub Releases
 
-## Public GitHub Track
+This repository uses the `v0.x` version line for all public GitHub releases, tags, release notes, and portfolio-facing documentation.
 
-Public GitHub releases use `v0.x` naming.
+Previous public releases include:
 
-Examples:
+- v0.4 — Security Hardening
+- v0.4.1 — Public Security Polish
+- v0.4.2 — Doctor Output Consistency
+- v0.5 — Public Toolkit Foundation
 
-- v0.1
-- v0.2
-- v0.3
-- v0.4
-- v0.4.1
+## Current Public Release
 
-This track represents the public repository state.
+**v0.5 — Public Toolkit Foundation**
 
-## Internal HomeLab Milestone Track
+v0.5 is the current public release. It provides public-safe diagnostics, status reporting, backup dry-run tooling, security validation, shell validation, contribution guidance, and sanitized demo documentation.
 
-Private HomeLab AgentOps milestones use `Beta 4.x` naming.
+## Internal Documentation
 
-Examples:
+Private HomeLab documentation may use separate internal milestone labels. Those labels are not public GitHub release versions and do not define the public release track.
 
-- Beta 4.6
-- Beta 4.6.1
-- Beta 4.6.2
-- Beta 4.6.3
+## Historical Sanitized Exports
 
-This track represents internal operational milestones from the private HomeLab.
+The `releases/` directory may preserve sanitized historical exports for documentation purposes.
 
-## Current Mapping
-
-- Public GitHub track: v0.4 / v0.4.1 polish
-- Internal milestone represented: Beta 4.6.3
-
-The folder `releases/beta-4.6.3/` is a sanitized public export of an internal HomeLab milestone. It does not replace the public GitHub `v0.x` release track.
+Historical export names do not override or replace the public GitHub `v0.x` version line.
