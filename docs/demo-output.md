@@ -13,7 +13,7 @@ Security Scan: GREEN
 Strict Scan: GREEN
 Doctor: GREEN
 Shell Validation: GREEN
-Public release: v0.5 — Public Toolkit Foundation
+Public release: v0.5.1 — Public Toolkit Alignment
 Current quality baseline: GREEN
 
 The repository quality snapshot is separate from the host-specific `halo-status.sh` result. `HALO_PUBLIC_STATUS=GREEN` means no local warnings were detected. `HALO_PUBLIC_STATUS=WARN` means a local condition requires review. Both results remain public-safe and do not require exposing private network, mount, or path details.

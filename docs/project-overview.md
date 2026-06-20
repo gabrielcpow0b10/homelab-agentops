@@ -71,4 +71,4 @@ It includes public-safe explanations, sanitized workflows, example scripts, and 
 
 ## Current public milestone
 
-The current public milestone is v0.5 Public Toolkit Foundation. The focus is to provide tested public-safe diagnostics, status reporting, backup dry runs, security checks, shell validation, and clearer operational documentation without exposing private HomeLab details.
+The current public milestone is v0.5.1 Public Toolkit Alignment. The focus is to provide a canonical public toolkit with tested diagnostics, status reporting, backup dry runs, security checks, shell validation, and clearer operational documentation without exposing private HomeLab details.
