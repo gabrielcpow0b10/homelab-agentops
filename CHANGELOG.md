@@ -6,11 +6,11 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 
 ---
 
-## Unreleased
+## v0.5.1 - Public Toolkit Alignment
 
 ### Changed
 
-- Aligned public documentation with the current `v0.5` release.
+- Aligned public documentation and runtime behavior with the v0.5 Public Toolkit Foundation.
 - Updated `install.sh` to install the canonical public commands:
   - `halo-doctor`
   - `halo-security-scan`
