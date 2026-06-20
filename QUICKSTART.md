@@ -60,15 +60,17 @@ After install, helper commands may be available directly:
 
     halo-doctor
     halo-security-scan
+    halo-status
+    halo-backup-dryrun
 
 ## 6. Review public examples
 
-Sanitized examples are stored under:
+Canonical public scripts and sanitized examples are stored under:
 
+    scripts/
     scripts/examples/
-    releases/beta-4.6.3/
 
-These files are examples only. They are not meant to expose private production runtime configuration.
+These files are examples only. They do not expose private production runtime configuration.
 
 ## Expected Public Result
 

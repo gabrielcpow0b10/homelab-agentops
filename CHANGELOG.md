@@ -6,6 +6,16 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 
 ---
 
+## Unreleased
+
+### Changed
+
+- Removed the legacy `releases/beta-4.6.3/` archive from the canonical `main` tree to preserve one clear public `v0.x` release line.
+- Updated current-public-release references to `v0.5.1`.
+- Preserved historical sanitized-export traceability in Git history and the `beta-4-6-3-public-sanitized` archival branch.
+
+---
+
 ## v0.5.1 - Public Toolkit Alignment
 
 ### Changed
@@ -114,9 +124,11 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 
 - Repository created and pushed to GitHub as the first public HomeLab AgentOps milestone.
 
-## Beta 4.6.3 - Public Sanitized Export
+## Historical Archive: Beta 4.6.3 - Public Sanitized Export
 
-Added a GitHub-ready sanitized public export under `releases/beta-4.6.3/`.
+Originally added a GitHub-ready sanitized public export under `releases/beta-4.6.3/`.
+
+Historical note: this archive was later removed from the canonical `main` tree to preserve a single public `v0.x` release line. Its original content remains available in Git history and the `beta-4-6-3-public-sanitized` archival branch.
 
 This export documents:
 - Agent Layer upgrade
@@ -135,7 +147,7 @@ Public safety checks completed:
 
 ## v0.4.1 - Public Security Polish
 
-Improved the public repository polish after the Beta 4.6.3 sanitized release.
+Improved the public repository polish after the historical Beta 4.6.3 sanitized export.
 
 ### Added
 
