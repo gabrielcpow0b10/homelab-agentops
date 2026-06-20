@@ -27,7 +27,7 @@ ROOT="$(repo_root)"
 echo "HomeLab AgentOps Public Status"
 echo "=============================="
 echo "Time: $(date)"
-echo "Repository: $(basename "$ROOT")"
+echo "Repository: current checkout"
 echo
 
 echo "== System =="
@@ -38,8 +38,13 @@ echo
 
 echo "== Disk =="
 if command -v df >/dev/null 2>&1; then
-  df -h "$ROOT" | tail -n 1
-  ok "Disk check completed"
+  disk_usage="$(df -P "$ROOT" 2>/dev/null | awk 'NR == 2 {print $5}')"
+  if [ -n "$disk_usage" ]; then
+    echo "Disk usage: $disk_usage"
+    ok "Disk check completed"
+  else
+    warn "Disk usage could not be determined"
+  fi
 else
   warn "df command not available"
 fi
@@ -73,8 +78,19 @@ echo
 
 echo "== systemd =="
 if command -v systemctl >/dev/null 2>&1; then
-  echo "systemd: available"
-  systemctl is-system-running 2>/dev/null || true
+  system_state="$(systemctl is-system-running 2>/dev/null || true)"
+
+  case "$system_state" in
+    running)
+      ok "systemd state: running"
+      ;;
+    degraded)
+      warn "systemd state: degraded"
+      ;;
+    *)
+      warn "systemd state: ${system_state:-unknown}"
+      ;;
+  esac
 else
   echo "systemd: not available on this platform"
   echo "This is expected on macOS or non-systemd systems."
@@ -83,8 +99,11 @@ echo
 
 echo "== Tailscale Optional Check =="
 if command -v tailscale >/dev/null 2>&1; then
-  echo "Tailscale binary: found"
-  tailscale ip -4 2>/dev/null || echo "Tailscale installed but no IPv4 returned."
+  if tailscale ip -4 >/dev/null 2>&1; then
+    ok "Tailscale IPv4 is available"
+  else
+    warn "Tailscale is installed but no IPv4 is available"
+  fi
 else
   echo "Tailscale binary: not found"
   echo "Tailscale is optional for this public toolkit."

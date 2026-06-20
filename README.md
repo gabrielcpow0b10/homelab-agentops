@@ -5,9 +5,9 @@
 ![Security](https://img.shields.io/badge/security-sanitized-green)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Raspberry%20Pi-lightgrey)
 
-**Version:** v0.4 Security Hardening  
-**Status:** Functional public starter kit for HomeLab diagnostics and safety checks  
-**Focus:** Monitoring, backup, recovery, automation, secure remote operations, and future local AI agents  
+**Current public release:** v0.5 — Public Toolkit Foundation
+**Status:** Functional public toolkit for diagnostics, public-safe status reporting, backup dry runs, and safety validation
+**Focus:** Monitoring, backup, recovery, automation, secure remote operations, and future local AI agents
 **Author:** Gabriel Cruz
 
 HomeLab AgentOps is a self-hosted infrastructure and operations project built to practice real-world Linux administration, Docker services, NAS-backed documentation, monitoring, backup/recovery workflows, safe automation, and private remote access.
@@ -16,9 +16,9 @@ This repository is the **public and sanitized** version of a working private Hom
 
 ---
 
-## New in v0.4
+## Current public release — v0.5
 
-v0.4 strengthens the repository as a public toolkit with diagnostics, security checks, GitHub Actions, and a clearer public/private safety boundary.
+v0.5 is the Public Toolkit Foundation release. It provides public-safe commands that can be tested without private HomeLab access.
 
 You can now run public-safe helper scripts:
 
@@ -26,7 +26,9 @@ You can now run public-safe helper scripts:
 git clone https://github.com/gabrielcpow0b10/homelab-agentops.git
 cd homelab-agentops
 bash scripts/halo-doctor.sh
-bash scripts/halo-security-scan.sh
+bash scripts/halo-status.sh
+bash scripts/halo-backup-dryrun.sh
+bash scripts/halo-security-scan.sh --strict
 ```
 
 For the fastest setup, see [QUICKSTART.md](QUICKSTART.md). For sanitized example output, see [docs/demo-output.md](docs/demo-output.md).
@@ -37,8 +39,8 @@ Optional local install:
 bash install.sh
 halo-doctor
 halo-security-scan
-halo-status-example
-halo-backup-example
+halo-status
+halo-backup-dryrun
 ```
 
 ---
@@ -252,8 +254,6 @@ See [SECURITY.md](SECURITY.md) for the public security model.
 
 ### Next improvements
 
-- Add `halo-status.sh` as a stronger public status command
-- Add `halo-backup-dryrun.sh`
 - Add a local dashboard preview
 - Add cross-platform notes for macOS and Linux
 - Add local AI / MCP readiness documentation
@@ -302,7 +302,7 @@ See [SECURITY.md](SECURITY.md) for the public security model.
 
 ## Current status
 
-HomeLab AgentOps is active and evolving. v0.4 is the current public security-hardening milestone: it keeps the project sanitized while adding functional scripts, repository safety checks, and automated GitHub Actions validation.
+HomeLab AgentOps is active and evolving. v0.5 is the current public toolkit foundation release: it provides tested public-safe commands, repository safety checks, shell validation, contribution guidance, and automated GitHub Actions quality gates.
 
 ---
 
@@ -322,7 +322,7 @@ This project demonstrates how a small HomeLab can grow into a serious infrastruc
 
 ## Author
 
-**Gabriel Cruz**  
+**Gabriel Cruz**
 Physics graduate, Computer Science student, and HomeLab / local AI systems builder.
 
 ## Who is this for?
@@ -356,9 +356,13 @@ The status and backup dry-run scripts are public-safe by design:
 - no production backup is created
 - no destructive action is performed
 
-Expected public result:
+Status command result:
 
-    HALO_PUBLIC_STATUS=GREEN
+- `HALO_PUBLIC_STATUS=GREEN` means no local warnings were detected.
+- `HALO_PUBLIC_STATUS=WARN` means a local condition requires review.
+
+Other expected public-safe results:
+
     HALO_BACKUP_DRYRUN=OK
     Security scan result: GREEN
 

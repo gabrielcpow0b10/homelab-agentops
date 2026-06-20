@@ -71,4 +71,4 @@ It includes public-safe explanations, sanitized workflows, example scripts, and 
 
 ## Current public milestone
 
-The current public milestone is v0.4 Security Hardening. The focus is to keep the repository public-safe while adding functional diagnostics, security checks, automated GitHub Actions validation, and clearer operational documentation.
+The current public milestone is v0.5 Public Toolkit Foundation. The focus is to provide tested public-safe diagnostics, status reporting, backup dry runs, security checks, shell validation, and clearer operational documentation without exposing private HomeLab details.

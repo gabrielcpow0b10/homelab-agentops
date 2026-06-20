@@ -1,5 +1,44 @@
 # Changelog
 
+All notable public and sanitized repository changes are documented here.
+
+This changelog tracks the public GitHub `v0.x` release line. Private operational milestones, logs, credentials, reports, backups, and runtime details remain outside this repository.
+
+---
+
+## Unreleased
+
+### Changed
+
+- Aligned public documentation with the current `v0.5` release.
+- Updated `install.sh` to install the canonical public commands:
+  - `halo-doctor`
+  - `halo-security-scan`
+  - `halo-status`
+  - `halo-backup-dryrun`
+- Clarified that internal milestone labels and historical sanitized exports do not define public GitHub release versions.
+- Sanitized `halo-status.sh` runtime output to avoid private network, mount, path, and local checkout-name details.
+- Updated `halo-status.sh` to report a warning when local systemd health is degraded instead of returning a false GREEN status.
+
+---
+
+## v0.5 - Public Toolkit Foundation
+
+### Added
+
+- Added `halo-status.sh` for public-safe status reporting.
+- Added `halo-backup-dryrun.sh` for a non-destructive backup workflow check.
+- Added GitHub Actions shell syntax validation.
+- Added `CONTRIBUTING.md`.
+- Expanded sanitized demo output documentation.
+- Added public toolkit foundation documentation.
+
+### Status
+
+- Released and tagged as `v0.5`.
+
+---
+
 ## v0.4.2 Doctor Output Consistency
 
 ### Fixed
@@ -15,11 +54,6 @@
 - Strict security scan: GREEN
 
 
-All notable public/sanitized changes to this repository will be documented here.
-
-This changelog only tracks the public GitHub version. It does not expose private operational logs, private reports, real backups, secrets, or internal production configuration.
-
----
 
 ## v0.4 Security Hardening
 
