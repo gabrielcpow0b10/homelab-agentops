@@ -14,6 +14,12 @@ HomeLab AgentOps is a self-hosted infrastructure and operations project built to
 
 This repository is the **public and sanitized** version of a working private HomeLab. It documents the architecture, operational model, security posture, backup strategy, recovery strategy, and example workflows without exposing private credentials, real tokens, internal logs, real backup archives, or sensitive configuration files.
 
+## Portfolio Snapshot
+
+HomeLab AgentOps is a local-first operations toolkit built from a real Raspberry Pi 8GB HomeLab environment. It demonstrates public-safe infrastructure documentation, diagnostics, backup dry-run workflows, shell validation, repository safety checks, and clear public/private separation.
+
+The public repository is designed to be reproducible without requiring access to the private HomeLab, NAS, Tailscale network, secrets, logs, or production configuration.
+
 ---
 
 ## Current public release — v0.5.1
