@@ -63,6 +63,7 @@ required_files=(
   "scripts/halo-quality-gate.sh"
   ".github/workflows/security-scan.yml"
   ".github/workflows/shell-validation.yml"
+  ".github/workflows/quality-gate.yml"
 )
 
 missing_files=0
