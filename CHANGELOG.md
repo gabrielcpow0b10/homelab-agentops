@@ -8,7 +8,15 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 
 ## Unreleased
 
+### Added
+
+- Added `scripts/halo-quality-gate.sh` as the canonical blocking repository validation command.
+- Added `.github/workflows/quality-gate.yml` to run the public quality gate on pull requests, pushes to `main`, and manual workflow runs.
+
 ### Changed
+
+- Replaced installer symlinks with portable local wrappers that invoke repository scripts through Bash and work from any current directory.
+- Added `halo-quality-gate` to the public installer commands.
 
 - Removed the legacy `releases/beta-4.6.3/` archive from the canonical `main` tree to preserve one clear public `v0.x` release line.
 - Updated current-public-release references to `v0.5.1`.
