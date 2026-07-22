@@ -121,6 +121,7 @@ Agents          Kiosk View         Recovery     Ollama/Open WebUI
 - Run public-safe HomeLab diagnostics with `halo-doctor`.
 - Run repository safety checks with `halo-security-scan`.
 - Install helper commands locally with `install.sh`.
+- Run the canonical blocking repository validation with `halo-quality-gate`.
 - Validate public safety automatically through GitHub Actions.
 - Document NAS-safe monitoring, backup/recovery, Telegram gateway design, and rack dashboard concepts.
 - Keep a clear boundary between private HomeLab operations and public portfolio-safe documentation.
@@ -135,6 +136,7 @@ Agents          Kiosk View         Recovery     Ollama/Open WebUI
 | `scripts/halo-security-scan.sh` | Scans the public repo for common secret patterns and forbidden file types before publishing. |
 | `scripts/examples/halo-status.example.sh` | Simple sanitized status example. |
 | `scripts/examples/halo-backup.example.sh` | Backup workflow concept example. |
+| `scripts/halo-quality-gate.sh` | Runs the canonical blocking checks for required files, shell syntax, version consistency, repository safety, and backup dry-run behavior. |
 | `install.sh` | Adds helper commands to `~/.local/bin`. |
 
 ---
@@ -348,6 +350,7 @@ The public repository is intentionally sanitized. It demonstrates operational st
 
 The public toolkit includes safe commands that can be tested without private HomeLab access.
 
+    bash scripts/halo-quality-gate.sh
     bash scripts/halo-status.sh
     bash scripts/halo-backup-dryrun.sh
     bash scripts/halo-security-scan.sh --strict
