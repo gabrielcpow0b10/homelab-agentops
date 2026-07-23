@@ -132,12 +132,14 @@ Agents          Kiosk View         Recovery     Ollama/Open WebUI
 
 | Script | Purpose |
 |---|---|
-| `scripts/halo-doctor.sh` | Runs a public-safe local diagnostic check for system, Docker, systemd, Tailscale, NAS-safe mode, and repo safety. |
-| `scripts/halo-security-scan.sh` | Scans the public repo for common secret patterns and forbidden file types before publishing. |
-| `scripts/examples/halo-status.example.sh` | Simple sanitized status example. |
+| `scripts/halo-quality-gate.sh` | Canonical blocking validation: required files, shell syntax, whitespace, version consistency, repository safety, and backup dry-run behavior. |
+| `scripts/halo-doctor.sh` | Public-safe local diagnostic for system, Docker, systemd, Tailscale, NAS-safe mode, and repository safety. |
+| `scripts/halo-status.sh` | Public-safe host status report emitting `HALO_PUBLIC_STATUS=GREEN|WARN`. |
+| `scripts/halo-security-scan.sh` | Scans the repository for secret patterns, private networks, private paths, and forbidden file types. |
+| `scripts/halo-backup-dryrun.sh` | Non-destructive backup preview emitting `HALO_BACKUP_DRYRUN=OK`. Copies nothing. |
+| `scripts/examples/halo-status.example.sh` | Sanitized status example. |
 | `scripts/examples/halo-backup.example.sh` | Backup workflow concept example. |
-| `scripts/halo-quality-gate.sh` | Runs the canonical blocking checks for required files, shell syntax, version consistency, repository safety, and backup dry-run behavior. |
-| `install.sh` | Adds helper commands to `~/.local/bin`. |
+| `install.sh` | Installs portable wrapper commands into `~/.local/bin`. |
 
 ---
 
@@ -280,30 +282,45 @@ See [SECURITY.md](SECURITY.md) for the public security model.
 
 ```text
 .
-├── README.md
-├── QUICKSTART.md
-├── LICENSE
-├── ARCHITECTURE.md
-├── BACKUP_RUNBOOK_PUBLIC.md
-├── RECOVERY_PUBLIC.md
-├── ROADMAP.md
-├── SECURITY.md
-├── CHANGELOG.md
-├── .env.example
-├── install.sh
-├── docs/
-│   ├── project-overview.md
-│   ├── demo-output.md
-│   ├── nas-safe-monitoring.md
-│   ├── telegram-gateway-model.md
-│   ├── backup-restore-model.md
-│   └── rack-command-center.md
-└── scripts/
-    ├── halo-doctor.sh
-    ├── halo-security-scan.sh
-    └── examples/
-        ├── halo-backup.example.sh
-        └── halo-status.example.sh
+  ARCHITECTURE.md
+  BACKUP_RUNBOOK_PUBLIC.md
+  CHANGELOG.md
+  CONTRIBUTING.md
+  docs
+    backup-restore-model.md
+    demo-output.md
+    nas-safe-monitoring.md
+    project-overview.md
+    public-security-hardening.md
+    rack-command-center.md
+    security
+      public-release-checklist.md
+    telegram-gateway-model.md
+    v0.5-public-toolkit-foundation.md
+  .env.example
+  .github
+    workflows
+      quality-gate.yml
+      security-scan.yml
+      shell-validation.yml
+  .gitignore
+  install.sh
+  LICENSE
+  QUICKSTART.md
+  README.md
+  RECOVERY_PUBLIC.md
+  ROADMAP.md
+  scripts
+    examples
+      halo-backup.example.sh
+      halo-status.example.sh
+    halo-backup-dryrun.sh
+    halo-doctor.sh
+    halo-quality-gate.sh
+    halo-security-scan.sh
+    halo-status.sh
+  SECURITY.md
+  VERSIONING.md
 ```
 
 ---
