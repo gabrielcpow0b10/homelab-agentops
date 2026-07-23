@@ -11,6 +11,7 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 ### Fixed
 
 - Fixed `scripts/halo-status.sh` to use `HALO_NAS_MOUNT`, matching `.env.example` and `halo-doctor.sh`, so configured NAS checks are no longer silently ignored.
+- Replaced the working-tree-only whitespace validation with a tracked-file scan so committed trailing whitespace is correctly blocked in local and CI runs.
 
 ---
 
