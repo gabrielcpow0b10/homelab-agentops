@@ -11,12 +11,13 @@ Public releases include:
 - v0.4.2 — Doctor Output Consistency
 - v0.5 — Public Toolkit Foundation
 - v0.5.1 — Public Toolkit Alignment
+- v0.5.2 - Public Quality Gate
 
 ## Current Public Release
 
-**v0.5.1 — Public Toolkit Alignment**
+**v0.5.2 - Public Quality Gate**
 
-v0.5.1 is the current public release. It builds on the v0.5 toolkit foundation by aligning public documentation, canonical commands, versioning, and public-safe status output.
+v0.5.2 is the current public release. It adds a canonical blocking repository quality gate, automated GitHub Actions validation, portable installer wrappers, and aligned public documentation.
 
 ## Internal Documentation
 

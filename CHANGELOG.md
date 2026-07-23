@@ -8,6 +8,10 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 
 ## Unreleased
 
+---
+
+## v0.5.2 - Public Quality Gate
+
 ### Added
 
 - Added `scripts/halo-quality-gate.sh` as the canonical blocking repository validation command.
@@ -19,7 +23,7 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 - Added `halo-quality-gate` to the public installer commands.
 
 - Removed the legacy `releases/beta-4.6.3/` archive from the canonical `main` tree to preserve one clear public `v0.x` release line.
-- Updated current-public-release references to `v0.5.1`.
+- Updated current-public-release references to `v0.5.2`.
 - Preserved historical sanitized-export traceability in Git history and the `beta-4-6-3-public-sanitized` archival branch.
 
 ---

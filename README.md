@@ -5,7 +5,7 @@
 ![Security](https://img.shields.io/badge/security-sanitized-green)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Raspberry%20Pi-lightgrey)
 
-**Current public release:** v0.5.1 — Public Toolkit Alignment
+**Current public release:** v0.5.2 - Public Quality Gate
 **Status:** Functional public toolkit for diagnostics, public-safe status reporting, backup dry runs, and safety validation
 **Focus:** Monitoring, backup, recovery, automation, secure remote operations, and future local AI agents
 **Author:** Gabriel Cruz
@@ -22,9 +22,9 @@ The public repository is designed to be reproducible without requiring access to
 
 ---
 
-## Current public release — v0.5.1
+## Current public release - v0.5.2
 
-v0.5.1 is the current public patch release. It builds on the Public Toolkit Foundation by aligning documentation, canonical commands, and public-safe runtime output without requiring private HomeLab access.
+v0.5.2 is the current public patch release. It adds a canonical blocking quality gate, GitHub Actions integration, portable installer wrappers, and aligned public documentation while preserving the public/private boundary.
 
 You can now run public-safe helper scripts:
 
@@ -310,7 +310,7 @@ See [SECURITY.md](SECURITY.md) for the public security model.
 
 ## Current status
 
-HomeLab AgentOps is active and evolving. v0.5.1 is the current public release: it provides an aligned public toolkit, tested public-safe commands, repository safety checks, shell validation, contribution guidance, and automated GitHub Actions quality gates.
+HomeLab AgentOps is active and evolving. v0.5.2 is the current public release: it adds a canonical public quality gate, portable installed commands, repository safety checks, shell validation, contribution guidance, and automated GitHub Actions quality gates.
 
 ---
 
