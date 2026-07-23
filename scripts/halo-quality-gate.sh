@@ -103,10 +103,18 @@ fi
 
 section "Whitespace"
 
-if git diff --check && git diff --cached --check; then
-  pass "Git whitespace validation"
+whitespace_hits="$(
+  git ls-files -z 2>/dev/null \
+    | xargs -0 grep -nE ' +$' -- 2>/dev/null \
+    | grep -vE '\.(png|jpg|jpeg|gif|ico|pdf)' \
+    || true
+)"
+
+if [ -z "$whitespace_hits" ]; then
+  pass "Trailing whitespace validation"
 else
-  fail "Git whitespace validation"
+  fail "Trailing whitespace validation"
+  printf '%s\n' "$whitespace_hits" | head -20 | sed 's/^/  /'
 fi
 
 section "Current public version"
