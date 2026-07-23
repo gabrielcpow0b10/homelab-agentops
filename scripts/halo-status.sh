@@ -111,19 +111,21 @@ fi
 echo
 
 echo "== NAS Optional Check =="
-if [ -n "${HALO_NAS_PATH:-}" ]; then
-  echo "HALO_NAS_PATH is set."
+NAS_MOUNT="${HALO_NAS_MOUNT:-}"
+
+if [ -n "$NAS_MOUNT" ]; then
+  echo "HALO_NAS_MOUNT is set."
   if command -v mountpoint >/dev/null 2>&1; then
-    if mountpoint -q "$HALO_NAS_PATH"; then
+    if mountpoint -q "$NAS_MOUNT"; then
       ok "NAS path appears mounted"
     else
-      warn "HALO_NAS_PATH set but not mounted"
+      warn "HALO_NAS_MOUNT set but not mounted"
     fi
   else
     echo "mountpoint command not available; skipping mount validation"
   fi
 else
-  echo "HALO_NAS_PATH not set"
+  echo "HALO_NAS_MOUNT not set"
   echo "NAS checks are disabled by default in the public toolkit."
 fi
 echo
