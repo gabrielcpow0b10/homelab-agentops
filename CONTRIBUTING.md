@@ -37,9 +37,17 @@ Use `.env.example`, sanitized outputs, and placeholder values instead.
 
 ## Before Opening a Pull Request
 
-Run the local checks:
+Run the blocking public quality gate:
 
 ```bash
-bash scripts/halo-security-scan.sh --strict
+bash scripts/halo-quality-gate.sh
+```
+
+The gate validates required public files, shell syntax, Git whitespace, current-version consistency, the canonical public tree, the strict security scan, and the backup dry-run.
+
+Host diagnostics are optional and non-blocking:
+
+```bash
 bash scripts/halo-doctor.sh
-find scripts -type f -name "*.sh" -print0 | xargs -0 -n1 bash -n
+bash scripts/halo-status.sh
+```
