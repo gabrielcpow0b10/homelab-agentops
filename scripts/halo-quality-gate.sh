@@ -117,6 +117,61 @@ else
   printf '%s\n' "$whitespace_hits" | head -20 | sed 's/^/  /'
 fi
 
+section "Script documentation coverage"
+
+undocumented_scripts=""
+
+while IFS= read -r -d '' script; do
+  if ! grep -qF "$script" README.md; then
+    undocumented_scripts="${undocumented_scripts}${script}"$'\n'
+  fi
+done < <(find scripts -type f -name "*.sh" -print0)
+
+if [ -z "$undocumented_scripts" ]; then
+  pass "All scripts are documented in README"
+else
+  fail "All scripts are documented in README"
+  printf '%s' "$undocumented_scripts" | sed 's/^/  /'
+fi
+
+section "Environment variable contract"
+
+consumed_vars="$(
+  grep -rhoE '\$\{HALO_[A-Z0-9_]+' scripts/ install.sh 2>/dev/null \
+    | sed 's/^\${//' | sort -u
+)"
+
+declared_vars="$(
+  grep -oE '^[[:space:]]*HALO_[A-Z0-9_]+=' .env.example 2>/dev/null \
+    | tr -d ' =' | sort -u
+)"
+
+ALLOWLIST='HALO_PUBLIC_STATUS|HALO_BACKUP_DRYRUN|HALO_QUALITY_GATE|HALO_TELEGRAM_ENABLED|HALO_LOCAL_AI_ENABLED|HALO_MODEL_PROVIDER|HALO_MODEL_NAME'
+
+orphans="$(
+  comm -23 <(printf '%s\n' "$consumed_vars") <(printf '%s\n' "$declared_vars") \
+    | grep -vE "^($ALLOWLIST)$" || true
+)"
+
+dead="$(
+  comm -13 <(printf '%s\n' "$consumed_vars") <(printf '%s\n' "$declared_vars") \
+    | grep -vE "^($ALLOWLIST)$" || true
+)"
+
+if [ -z "$orphans" ] && [ -z "$dead" ]; then
+  pass "Environment variables match .env.example"
+else
+  fail "Environment variables match .env.example"
+  [ -n "$orphans" ] && {
+    echo "  Read by scripts but undocumented:"
+    printf '%s\n' "$orphans" | sed 's/^/    /'
+  }
+  [ -n "$dead" ] && {
+    echo "  Documented but unused:"
+    printf '%s\n' "$dead" | sed 's/^/    /'
+  }
+fi
+
 section "Current public version"
 
 readme_version="$(
@@ -154,10 +209,15 @@ overview_version="$(
     docs/project-overview.md | head -1
 )"
 
+changelog_version="$(
+  sed -n     's/^## v\([0-9][0-9.]*\).*/v\1/p'     CHANGELOG.md | head -1
+)"
+
 if [ -n "$readme_version" ] &&
    [ "$readme_version" = "$versioning_version" ] &&
    [ "$readme_version" = "$demo_version" ] &&
-   [ "$readme_version" = "$overview_version" ]; then
+   [ "$readme_version" = "$overview_version" ] &&
+  [ "$readme_version" = "$changelog_version" ]; then
   pass "Current public version is consistent: $readme_version"
 else
   fail "Current public version consistency"
@@ -165,6 +225,7 @@ else
   echo "  VERSIONING:      ${versioning_version:-missing}"
   echo "  Demo output:     ${demo_version:-missing}"
   echo "  Project overview:${overview_version:-missing}"
+  echo "  CHANGELOG:       ${changelog_version:-missing}"
 fi
 
 section "Canonical public tree"
