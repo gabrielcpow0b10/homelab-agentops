@@ -19,5 +19,10 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Install ShellCheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends --yes shellcheck
+
       - name: Run public quality gate
         run: bash scripts/halo-quality-gate.sh

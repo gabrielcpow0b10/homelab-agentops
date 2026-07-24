@@ -101,6 +101,32 @@ else
   fail "Shell syntax validation"
 fi
 
+section "ShellCheck"
+
+if ! command -v shellcheck >/dev/null 2>&1; then
+  fail "ShellCheck is available"
+  echo "  Install shellcheck before running the canonical quality gate."
+else
+  shellcheck_failures=0
+
+  while IFS= read -r -d '' script; do
+    if ! shellcheck -S style -e SC1091 "$script"; then
+      shellcheck_failures=$((shellcheck_failures + 1))
+    fi
+  done < <(
+    {
+      printf '%s\0' "install.sh"
+      find scripts -type f -name '*.sh' -print0
+    }
+  )
+
+  if [ "$shellcheck_failures" -eq 0 ]; then
+    pass "ShellCheck validation"
+  else
+    fail "ShellCheck validation"
+  fi
+fi
+
 section "Whitespace"
 
 whitespace_hits="$(
