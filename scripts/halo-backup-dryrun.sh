@@ -19,7 +19,7 @@ display_path() {
       basename "$ROOT"
       ;;
     "$ROOT"/*)
-      printf '%s\n' "${1#$ROOT/}"
+      printf '%s\n' "${1#"$ROOT"/}"
       ;;
     *)
       echo "outside-repository"

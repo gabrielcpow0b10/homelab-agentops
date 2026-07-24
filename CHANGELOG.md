@@ -10,9 +10,13 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 
 ### Added
 
+- Added ShellCheck as a blocking validation in the canonical public quality gate and installed it in the GitHub Actions quality-gate workflow.
+
 - Added quality gate contract checks for environment variables, README script coverage, and CHANGELOG version consistency.
 
 ### Fixed
+
+- Fixed the SC2295 path-prefix expansion in `scripts/halo-backup-dryrun.sh` without changing its non-destructive behavior.
 
 - Fixed `scripts/halo-status.sh` to use `HALO_NAS_MOUNT`, matching `.env.example` and `halo-doctor.sh`, so configured NAS checks are no longer silently ignored.
 - Replaced the working-tree-only whitespace validation with a tracked-file scan so committed trailing whitespace is correctly blocked in local and CI runs.
