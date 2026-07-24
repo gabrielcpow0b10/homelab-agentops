@@ -8,6 +8,10 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 
 ## Unreleased
 
+### Added
+
+- Added quality gate contract checks for environment variables, README script coverage, and CHANGELOG version consistency.
+
 ### Fixed
 
 - Fixed `scripts/halo-status.sh` to use `HALO_NAS_MOUNT`, matching `.env.example` and `halo-doctor.sh`, so configured NAS checks are no longer silently ignored.
