@@ -160,7 +160,9 @@ if [ -f scripts/halo-security-scan.sh ]; then
 else
   warn "Public security scan script not found"
 fi
+}
 
+print_summary() {
   section "Summary"
 
   echo "Passed:  $PASS"
@@ -187,3 +189,4 @@ check_systemd
 check_tailscale
 check_nas_safe
 check_public_safety
+print_summary

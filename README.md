@@ -1,6 +1,6 @@
 # HomeLab AgentOps
 
-![Security Scan](https://github.com/gabrielcpow0b10/homelab-agentops/actions/workflows/security-scan.yml/badge.svg)
+![Public Quality Gate](https://github.com/gabrielcpow0b10/homelab-agentops/actions/workflows/quality-gate.yml/badge.svg)
 ![Status](https://img.shields.io/badge/status-public%20toolkit%20preview-blue)
 ![Security](https://img.shields.io/badge/security-sanitized-green)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Raspberry%20Pi-lightgrey)
@@ -301,8 +301,6 @@ See [SECURITY.md](SECURITY.md) for the public security model.
   .github
     workflows
       quality-gate.yml
-      security-scan.yml
-      shell-validation.yml
   .gitignore
   install.sh
   LICENSE

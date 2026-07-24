@@ -61,8 +61,6 @@ required_files=(
   "scripts/halo-doctor.sh"
   "scripts/halo-status.sh"
   "scripts/halo-quality-gate.sh"
-  ".github/workflows/security-scan.yml"
-  ".github/workflows/shell-validation.yml"
   ".github/workflows/quality-gate.yml"
 )
 

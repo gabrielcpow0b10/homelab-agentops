@@ -14,6 +14,11 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 
 - Added quality gate contract checks for environment variables, README script coverage, and CHANGELOG version consistency.
 
+### Changed
+
+- Consolidated GitHub Actions validation into `.github/workflows/quality-gate.yml` and removed the redundant `security-scan.yml` and `shell-validation.yml` workflows.
+- Extracted `print_summary()` from `check_public_safety()` in `scripts/halo-doctor.sh` without changing its output or exit behavior.
+
 ### Fixed
 
 - Fixed the SC2295 path-prefix expansion in `scripts/halo-backup-dryrun.sh` without changing its non-destructive behavior.
