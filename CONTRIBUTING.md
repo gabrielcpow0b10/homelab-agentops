@@ -43,7 +43,9 @@ Run the blocking public quality gate:
 bash scripts/halo-quality-gate.sh
 ```
 
-The gate validates required public files, shell syntax, Git whitespace, current-version consistency, the canonical public tree, the strict security scan, and the backup dry-run.
+The gate validates required public files, shell syntax, ShellCheck, Git whitespace, README script coverage, the environment-variable contract, current-version consistency, the canonical public tree, the strict security scan, and the backup dry-run.
+
+GitHub Actions runs this same canonical gate through `.github/workflows/quality-gate.yml`, avoiding duplicated validation workflows.
 
 Host diagnostics are optional and non-blocking:
 
