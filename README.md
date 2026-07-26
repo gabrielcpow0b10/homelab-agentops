@@ -5,7 +5,7 @@
 ![Security](https://img.shields.io/badge/security-sanitized-green)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Raspberry%20Pi-lightgrey)
 
-**Current public release:** v0.5.2 - Public Quality Gate
+**Current public release:** v0.5.3 - Contract Enforcement
 **Status:** Functional public toolkit for diagnostics, public-safe status reporting, backup dry runs, and safety validation
 **Focus:** Monitoring, backup, recovery, automation, secure remote operations, and future local AI agents
 **Author:** Gabriel Cruz
@@ -22,9 +22,9 @@ The public repository is designed to be reproducible without requiring access to
 
 ---
 
-## Current public release - v0.5.2
+## Current public release - v0.5.3
 
-v0.5.2 is the current public patch release. It adds a canonical blocking quality gate, GitHub Actions integration, portable installer wrappers, and aligned public documentation while preserving the public/private boundary.
+v0.5.3 is the current public patch release. It adds enforceable environment and documentation contracts, ShellCheck-backed Bash validation, one canonical GitHub Actions workflow, and cleaner diagnostics while preserving the public/private boundary.
 
 You can now run public-safe helper scripts:
 
@@ -325,7 +325,7 @@ See [SECURITY.md](SECURITY.md) for the public security model.
 
 ## Current status
 
-HomeLab AgentOps is active and evolving. v0.5.2 is the current public release: it adds a canonical public quality gate, portable installed commands, repository safety checks, shell validation, contribution guidance, and automated GitHub Actions quality gates.
+HomeLab AgentOps is active and evolving. v0.5.3 is the current public release: it adds enforceable configuration and documentation contracts, ShellCheck-backed validation, one canonical GitHub Actions workflow, and clearer diagnostics while preserving the public/private boundary.
 
 ---
 

@@ -71,4 +71,4 @@ It includes public-safe explanations, sanitized workflows, example scripts, and 
 
 ## Current public milestone
 
-The current public milestone is v0.5.2 Public Quality Gate. The focus is to provide canonical blocking repository validation, portable public toolkit wrappers, automated GitHub Actions checks, and clear public-safe operational documentation without exposing private HomeLab details.
+The current public milestone is v0.5.3 Contract Enforcement. The focus is enforceable environment and documentation contracts, ShellCheck-backed Bash validation, one canonical GitHub Actions workflow, and stable public-safe diagnostics without exposing private HomeLab details.
