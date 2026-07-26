@@ -12,12 +12,13 @@ Public releases include:
 - v0.5 — Public Toolkit Foundation
 - v0.5.1 — Public Toolkit Alignment
 - v0.5.2 - Public Quality Gate
+- v0.5.3 - Contract Enforcement
 
 ## Current Public Release
 
-**v0.5.2 - Public Quality Gate**
+**v0.5.3 - Contract Enforcement**
 
-v0.5.2 is the current public release. It adds a canonical blocking repository quality gate, automated GitHub Actions validation, portable installer wrappers, and aligned public documentation.
+v0.5.3 is the current public release. It adds enforceable environment and documentation contracts, ShellCheck-backed Bash validation, one canonical GitHub Actions workflow, and cleaner diagnostic structure while preserving established behavior.
 
 ## Internal Documentation
 

@@ -8,6 +8,10 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 
 ## Unreleased
 
+---
+
+## v0.5.3 - Contract Enforcement
+
 ### Added
 
 - Added ShellCheck as a blocking validation in the canonical public quality gate and installed it in the GitHub Actions quality-gate workflow.
@@ -27,7 +31,6 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 - Replaced the working-tree-only whitespace validation with a tracked-file scan so committed trailing whitespace is correctly blocked in local and CI runs.
 
 ---
-
 ## v0.5.2 - Public Quality Gate
 
 ### Added
