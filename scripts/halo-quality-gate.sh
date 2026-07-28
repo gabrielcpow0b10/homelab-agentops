@@ -288,6 +288,113 @@ run_with_marker \
   "HALO_BACKUP_DRYRUN=OK" \
   bash scripts/halo-backup-dryrun.sh
 
+section "Runtime report bridge"
+
+runtime_report="$TMP_DIR/halo-runtime-public-safe-report.txt"
+runtime_report_rc=0
+runtime_report_failed=0
+
+bash scripts/halo-status.sh   --report-out "$runtime_report"   >/dev/null 2>&1 || runtime_report_rc=$?
+
+if [ "$runtime_report_rc" -ne 0 ]; then
+  runtime_report_failed=1
+  echo "  halo-status.sh exited with code: $runtime_report_rc"
+elif [ ! -f "$runtime_report" ]; then
+  runtime_report_failed=1
+  echo "  Runtime report was not created."
+elif [ -L "$runtime_report" ]; then
+  runtime_report_failed=1
+  echo "  Runtime report must not be a symbolic link."
+else
+  runtime_report_bytes="$(
+    wc -c <"$runtime_report" |
+      tr -d ' '
+  )"
+
+  if [ "$runtime_report_bytes" -ge 65536 ]; then
+    runtime_report_failed=1
+    echo "  Runtime report exceeds the 64 KB limit."
+  fi
+
+  if ! grep -q '^HALO_PUBLIC_STATUS=' "$runtime_report"; then
+    runtime_report_failed=1
+    echo "  Runtime report is missing HALO_PUBLIC_STATUS."
+  fi
+
+  blocked_report_markers="$(
+    printf '%s' \
+      '(/Users/|~/\.ssh|192\.168\.|10\.0\.|172\.16\.|100\.|localhost|0\.0\.0\.0|' \
+      'pass''word|to''ken|sec''ret|api''_key|api''key|BEGIN PRIVATE'' KEY)'
+  )"
+
+  if grep -qiE "$blocked_report_markers" "$runtime_report"; then
+    runtime_report_failed=1
+    echo "  Runtime report contains a blocked private marker."
+  fi
+fi
+
+if [ "$runtime_report_failed" -eq 0 ]; then
+  pass "Runtime report is agent-safe"
+else
+  fail "Runtime report is agent-safe"
+fi
+
+section "Runtime report CLI contract"
+
+runtime_cli_failed=0
+default_status_rc=0
+missing_value_rc=0
+extra_argument_rc=0
+unknown_option_rc=0
+
+default_status_log="$TMP_DIR/halo-status-default.txt"
+missing_value_log="$TMP_DIR/halo-status-missing-value.txt"
+extra_argument_log="$TMP_DIR/halo-status-extra-argument.txt"
+unknown_option_log="$TMP_DIR/halo-status-unknown-option.txt"
+extra_report="$TMP_DIR/halo-status-extra-report.txt"
+
+bash scripts/halo-status.sh   >"$default_status_log" 2>&1 || default_status_rc=$?
+
+bash scripts/halo-status.sh   --report-out   >"$missing_value_log" 2>&1 || missing_value_rc=$?
+
+bash scripts/halo-status.sh   --report-out "$extra_report" extra   >"$extra_argument_log" 2>&1 || extra_argument_rc=$?
+
+bash scripts/halo-status.sh   --unknown-option   >"$unknown_option_log" 2>&1 || unknown_option_rc=$?
+
+if [ "$default_status_rc" -ne 0 ]; then
+  runtime_cli_failed=1
+  echo "  Default halo-status invocation exited with code: $default_status_rc"
+elif ! grep -q '^HALO_PUBLIC_STATUS=' "$default_status_log"; then
+  runtime_cli_failed=1
+  echo "  Default halo-status output is missing HALO_PUBLIC_STATUS."
+fi
+
+if [ "$missing_value_rc" -ne 2 ]; then
+  runtime_cli_failed=1
+  echo "  Missing report path returned: $missing_value_rc"
+fi
+
+if [ "$extra_argument_rc" -ne 2 ]; then
+  runtime_cli_failed=1
+  echo "  Extra report argument returned: $extra_argument_rc"
+fi
+
+if [ "$unknown_option_rc" -ne 2 ]; then
+  runtime_cli_failed=1
+  echo "  Unsupported option returned: $unknown_option_rc"
+fi
+
+if [ -e "$extra_report" ]; then
+  runtime_cli_failed=1
+  echo "  Rejected extra-argument invocation created a report."
+fi
+
+if [ "$runtime_cli_failed" -eq 0 ]; then
+  pass "Runtime report CLI contract"
+else
+  fail "Runtime report CLI contract"
+fi
+
 section "Host diagnostics"
 
 echo "halo-doctor.sh and halo-status.sh are intentionally non-blocking."
