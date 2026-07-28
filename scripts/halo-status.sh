@@ -1,6 +1,27 @@
 #!/usr/bin/env bash
 set -u
 
+REPORT_OUT=""
+
+if [ "$#" -eq 0 ]; then
+  :
+elif [ "${1:-}" = "--report-out" ]; then
+  if [ "$#" -lt 2 ] || [ -z "${2:-}" ]; then
+    echo "Error: --report-out requires a path." >&2
+    exit 2
+  fi
+
+  if [ "$#" -gt 2 ]; then
+    echo "Error: --report-out accepts exactly one path." >&2
+    exit 2
+  fi
+
+  REPORT_OUT="$2"
+else
+  echo "Error: unsupported argument: ${1:-}" >&2
+  exit 2
+fi
+
 status="GREEN"
 warnings=0
 
@@ -24,6 +45,7 @@ repo_root() {
 
 ROOT="$(repo_root)"
 
+generate_report() {
 echo "HomeLab AgentOps Public Status"
 echo "=============================="
 echo "Time: $(date)"
@@ -150,10 +172,75 @@ sensitive_matches="$(find "$ROOT" \
 if [ -n "$sensitive_matches" ]; then
   warn "Potential credential-like files found"
 else
-  ok "No common private key/token files found"
+  ok "No common credential-like files found"
 fi
 echo
 
 echo "== Result =="
 echo "Warnings: $warnings"
 echo "HALO_PUBLIC_STATUS=$status"
+}
+
+if [ -z "$REPORT_OUT" ]; then
+  generate_report
+  exit 0
+fi
+
+case "$REPORT_OUT" in
+  /*)
+    ;;
+  *)
+    echo "Error: --report-out requires an absolute path." >&2
+    exit 2
+    ;;
+esac
+
+if [ -L "$REPORT_OUT" ]; then
+  echo "Error: --report-out cannot write through a symbolic link." >&2
+  exit 2
+fi
+
+report_dir="$(dirname "$REPORT_OUT")"
+
+if [ ! -d "$report_dir" ]; then
+  echo "Error: report destination directory does not exist." >&2
+  exit 2
+fi
+
+if [ ! -w "$report_dir" ]; then
+  echo "Error: report destination directory is not writable." >&2
+  exit 2
+fi
+
+report_tmp="$(mktemp "$report_dir/.halo-status.XXXXXX")"
+
+cleanup_report() {
+  rm -f "$report_tmp"
+}
+
+trap cleanup_report EXIT INT TERM
+
+generate_report >"$report_tmp"
+
+report_bytes="$(wc -c <"$report_tmp" | tr -d ' ')"
+
+if [ "$report_bytes" -ge 65536 ]; then
+  echo "Error: generated runtime report exceeds the 64 KB limit." >&2
+  exit 1
+fi
+
+blocked_report_markers="$(
+  printf '%s' \
+    '(/Users/|~/\.ssh|192\.168\.|10\.0\.|172\.16\.|100\.|localhost|0\.0\.0\.0|' \
+    'pass''word|to''ken|sec''ret|api''_key|api''key|BEGIN PRIVATE'' KEY)'
+)"
+
+if grep -qiE "$blocked_report_markers" "$report_tmp"; then
+  echo "Error: generated runtime report failed the public-safe marker check." >&2
+  exit 1
+fi
+
+mv -f "$report_tmp" "$REPORT_OUT"
+trap - EXIT INT TERM
+
+echo "HALO_RUNTIME_REPORT_WRITTEN=OK"
