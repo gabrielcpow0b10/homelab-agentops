@@ -37,15 +37,21 @@ Use `.env.example`, sanitized outputs, and placeholder values instead.
 
 ## Before Opening a Pull Request
 
+Run the focused Bats regression suite:
+
+```bash
+bats --tap tests/public-safety.bats
+```
+
 Run the blocking public quality gate:
 
 ```bash
 bash scripts/halo-quality-gate.sh
 ```
 
-The gate validates required public files, shell syntax, ShellCheck, Git whitespace, README script coverage, the environment-variable contract, current-version consistency, the canonical public tree, the strict security scan, and the backup dry-run.
+The gate validates required public files, shell syntax, ShellCheck, Git whitespace, README script coverage, the environment-variable contract, current-version consistency, the canonical public tree, the strict security scan, the backup dry-run, and the public-safety Bats suite.
 
-GitHub Actions runs this same canonical gate through `.github/workflows/quality-gate.yml`, avoiding duplicated validation workflows.
+GitHub Actions installs ShellCheck and Bats and runs this same canonical gate through `.github/workflows/quality-gate.yml`, avoiding duplicated validation workflows.
 
 Host diagnostics are optional and non-blocking:
 

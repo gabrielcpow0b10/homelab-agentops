@@ -118,6 +118,7 @@ required_files=(
   "scripts/halo-doctor.sh"
   "scripts/halo-status.sh"
   "scripts/halo-quality-gate.sh"
+  "tests/public-safety.bats"
   ".github/workflows/quality-gate.yml"
 )
 
@@ -344,6 +345,43 @@ run_with_marker \
   "Public backup dry-run" \
   "HALO_BACKUP_DRYRUN=OK" \
   bash scripts/halo-backup-dryrun.sh
+
+section "Bats regression suite"
+
+if ! command -v bats >/dev/null 2>&1; then
+  fail "Bats is available"
+  echo "  Install Bats before running the canonical quality gate."
+else
+  bats_log="$TMP_DIR/public-safety-bats.txt"
+  bats_rc=0
+
+  defined_bats_tests="$(
+    grep -c '^@test ' tests/public-safety.bats ||
+      true
+  )"
+
+  bats --tap tests/public-safety.bats \
+    >"$bats_log" 2>&1 ||
+    bats_rc=$?
+
+  passed_bats_tests="$(
+    grep -c '^ok [0-9][0-9]* ' "$bats_log" ||
+      true
+  )"
+
+  if [ "$bats_rc" -eq 0 ] &&
+     [ "$defined_bats_tests" -ge 5 ] &&
+     [ "$defined_bats_tests" -le 6 ] &&
+     [ "$passed_bats_tests" -eq "$defined_bats_tests" ]; then
+    pass "Public safety Bats suite"
+  else
+    fail "Public safety Bats suite"
+    echo "  Exit code: $bats_rc"
+    echo "  Defined tests: $defined_bats_tests"
+    echo "  Passed tests: $passed_bats_tests"
+    tail -30 "$bats_log" | sed 's/^/  /'
+  fi
+fi
 
 section "Runtime report bridge"
 

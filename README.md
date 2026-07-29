@@ -317,11 +317,23 @@ See [SECURITY.md](SECURITY.md) for the public security model.
     halo-quality-gate.sh
     halo-security-scan.sh
     halo-status.sh
+  tests
+    public-safety.bats
   SECURITY.md
   VERSIONING.md
 ```
 
 ---
+
+## Public regression tests
+
+Run the six-test Bats suite with:
+
+```bash
+bats --tap tests/public-safety.bats
+```
+
+The canonical public quality gate runs the same suite automatically.
 
 ## Current status
 
