@@ -1,14 +1,66 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+SCRIPT_ROOT="$(
+  cd "$(dirname "${BASH_SOURCE[0]}")/.." &&
+  pwd
+)"
+
+read_public_version() {
+  local version
+
+  version="$(
+    sed -n \
+      's/^\*\*Current public release:\*\* \(v[0-9][0-9.]*\).*/\1/p' \
+      "$SCRIPT_ROOT/README.md" 2>/dev/null |
+    head -1 ||
+    true
+  )"
+
+  printf '%s\n' "${version:-unknown}"
+}
+
+usage() {
+  cat <<'EOF'
+Usage: halo-doctor [--json | --help | --version]
+
+Options:
+  --json       Print public-safe JSON output.
+  -h, --help   Show this help message.
+  --version    Show the public release version.
+EOF
+}
+
+print_version() {
+  printf 'halo-doctor %s\n' "$(read_public_version)"
+}
+
 OUTPUT_MODE="human"
 
 if [ "$#" -eq 0 ]; then
   :
-elif [ "$#" -eq 1 ] && [ "${1:-}" = "--json" ]; then
-  OUTPUT_MODE="json"
+elif [ "$#" -eq 1 ]; then
+  case "${1:-}" in
+    --json)
+      OUTPUT_MODE="json"
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --version)
+      print_version
+      exit 0
+      ;;
+    *)
+      echo "Error: unsupported argument: ${1:-}" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
 else
-  echo "Error: unsupported argument: ${1:-}" >&2
+  echo "Error: halo-doctor accepts at most one option." >&2
+  usage >&2
   exit 2
 fi
 
@@ -24,7 +76,7 @@ JSON_CHECK_DETAILS=()
 PUBLIC_VERSION="$(
   sed -n \
     's/^\*\*Current public release:\*\* \(v[0-9][0-9.]*\).*/\1/p' \
-    README.md 2>/dev/null |
+    "$SCRIPT_ROOT/README.md" 2>/dev/null |
   head -1 ||
   true
 )"
