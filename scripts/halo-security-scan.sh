@@ -6,14 +6,69 @@
 
 set -u
 
-MODE="${1:-normal}"
+SCRIPT_ROOT="$(
+  cd "$(dirname "${BASH_SOURCE[0]}")/.." &&
+  pwd
+)"
+
+read_public_version() {
+  local version
+
+  version="$(
+    sed -n \
+      's/^\*\*Current public release:\*\* \(v[0-9][0-9.]*\).*/\1/p' \
+      "$SCRIPT_ROOT/README.md" 2>/dev/null |
+    head -1 ||
+    true
+  )"
+
+  printf '%s\n' "${version:-unknown}"
+}
+
+usage() {
+  cat <<'EOF'
+Usage: halo-security-scan [--strict | --help | --version]
+
+Options:
+  --strict     Run the extended strict public-security scan.
+  -h, --help   Show this help message.
+  --version    Show the public release version.
+EOF
+}
+
+print_version() {
+  printf 'halo-security-scan %s\n' "$(read_public_version)"
+}
+
+MODE="normal"
 STRICT=0
 
-if [ "$MODE" = "--strict" ] || [ "$MODE" = "strict" ]; then
-  STRICT=1
-  MODE="strict"
+if [ "$#" -eq 0 ]; then
+  :
+elif [ "$#" -eq 1 ]; then
+  case "${1:-}" in
+    --strict|strict)
+      STRICT=1
+      MODE="strict"
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --version)
+      print_version
+      exit 0
+      ;;
+    *)
+      echo "Error: unsupported argument: ${1:-}" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
 else
-  MODE="normal"
+  echo "Error: halo-security-scan accepts at most one option." >&2
+  usage >&2
+  exit 2
 fi
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"

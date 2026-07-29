@@ -1,7 +1,64 @@
 #!/usr/bin/env bash
 set -u
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SCRIPT_ROOT="$(
+  cd "$(dirname "${BASH_SOURCE[0]}")/.." &&
+  pwd
+)"
+
+read_public_version() {
+  local version
+
+  version="$(
+    sed -n \
+      's/^\*\*Current public release:\*\* \(v[0-9][0-9.]*\).*/\1/p' \
+      "$SCRIPT_ROOT/README.md" 2>/dev/null |
+    head -1 ||
+    true
+  )"
+
+  printf '%s\n' "${version:-unknown}"
+}
+
+usage() {
+  cat <<'EOF'
+Usage: halo-quality-gate [--help | --version]
+
+Options:
+  -h, --help   Show this help message.
+  --version    Show the public release version.
+EOF
+}
+
+print_version() {
+  printf 'halo-quality-gate %s\n' "$(read_public_version)"
+}
+
+if [ "$#" -eq 0 ]; then
+  :
+elif [ "$#" -eq 1 ]; then
+  case "${1:-}" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --version)
+      print_version
+      exit 0
+      ;;
+    *)
+      echo "Error: unsupported argument: ${1:-}" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+else
+  echo "Error: halo-quality-gate accepts at most one option." >&2
+  usage >&2
+  exit 2
+fi
+
+ROOT="$SCRIPT_ROOT"
 cd "$ROOT" || exit 1
 
 passed=0
@@ -393,6 +450,101 @@ if [ "$runtime_cli_failed" -eq 0 ]; then
   pass "Runtime report CLI contract"
 else
   fail "Runtime report CLI contract"
+fi
+
+section "CLI help and version contract"
+
+cli_contract_failed=0
+
+cli_scripts=(
+  "scripts/halo-status.sh"
+  "scripts/halo-doctor.sh"
+  "scripts/halo-quality-gate.sh"
+  "scripts/halo-security-scan.sh"
+  "scripts/halo-backup-dryrun.sh"
+)
+
+for cli_script in "${cli_scripts[@]}"; do
+  cli_filename="$(basename "$cli_script")"
+  cli_name="${cli_filename%.sh}"
+
+  cli_help_log="$TMP_DIR/${cli_name}-help.txt"
+  cli_short_help_log="$TMP_DIR/${cli_name}-short-help.txt"
+  cli_version_log="$TMP_DIR/${cli_name}-version.txt"
+  cli_unknown_log="$TMP_DIR/${cli_name}-unknown.txt"
+  cli_extra_log="$TMP_DIR/${cli_name}-extra.txt"
+
+  cli_help_rc=0
+  cli_short_help_rc=0
+  cli_version_rc=0
+  cli_unknown_rc=0
+  cli_extra_rc=0
+
+  bash "$cli_script"     --help     >"$cli_help_log" 2>&1 ||
+    cli_help_rc=$?
+
+  bash "$cli_script"     -h     >"$cli_short_help_log" 2>&1 ||
+    cli_short_help_rc=$?
+
+  bash "$cli_script"     --version     >"$cli_version_log" 2>&1 ||
+    cli_version_rc=$?
+
+  bash "$cli_script"     --definitely-unsupported     >"$cli_unknown_log" 2>&1 ||
+    cli_unknown_rc=$?
+
+  bash "$cli_script"     --help extra     >"$cli_extra_log" 2>&1 ||
+    cli_extra_rc=$?
+
+  if [ "$cli_help_rc" -ne 0 ]; then
+    cli_contract_failed=1
+    echo "  $cli_name --help returned: $cli_help_rc"
+  elif ! grep -qE     "^Usage: ${cli_name}"     "$cli_help_log"; then
+    cli_contract_failed=1
+    echo "  $cli_name --help is missing its Usage line."
+  fi
+
+  if [ "$cli_short_help_rc" -ne 0 ]; then
+    cli_contract_failed=1
+    echo "  $cli_name -h returned: $cli_short_help_rc"
+  elif ! cmp -s     "$cli_help_log"     "$cli_short_help_log"; then
+    cli_contract_failed=1
+    echo "  $cli_name -h and --help outputs differ."
+  fi
+
+  expected_cli_version="${cli_name} ${readme_version}"
+  actual_cli_version="$(cat "$cli_version_log")"
+
+  if [ "$cli_version_rc" -ne 0 ]; then
+    cli_contract_failed=1
+    echo "  $cli_name --version returned: $cli_version_rc"
+  elif [ "$actual_cli_version" != "$expected_cli_version" ]; then
+    cli_contract_failed=1
+    echo "  $cli_name --version output is incorrect."
+    echo "    Expected: $expected_cli_version"
+    echo "    Actual:   $actual_cli_version"
+  fi
+
+  if [ "$cli_unknown_rc" -ne 2 ]; then
+    cli_contract_failed=1
+    echo "  $cli_name unknown option returned: $cli_unknown_rc"
+  elif ! grep -q '^Error:' "$cli_unknown_log"; then
+    cli_contract_failed=1
+    echo "  $cli_name unknown-option error message is missing."
+  fi
+
+  if [ "$cli_extra_rc" -ne 2 ]; then
+    cli_contract_failed=1
+    echo "  $cli_name extra argument returned: $cli_extra_rc"
+  elif ! grep -q '^Error:' "$cli_extra_log"; then
+    cli_contract_failed=1
+    echo "  $cli_name extra-argument error message is missing."
+  fi
+done
+
+if [ "$cli_contract_failed" -eq 0 ]; then
+  pass "All functional scripts expose consistent CLI help and version contracts"
+else
+  fail "All functional scripts expose consistent CLI help and version contracts"
 fi
 
 section "Host diagnostics"

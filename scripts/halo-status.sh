@@ -1,15 +1,71 @@
 #!/usr/bin/env bash
 set -u
 
+SCRIPT_ROOT="$(
+  cd "$(dirname "${BASH_SOURCE[0]}")/.." &&
+  pwd
+)"
+
+read_public_version() {
+  local version
+
+  version="$(
+    sed -n \
+      's/^\*\*Current public release:\*\* \(v[0-9][0-9.]*\).*/\1/p' \
+      "$SCRIPT_ROOT/README.md" 2>/dev/null |
+    head -1 ||
+    true
+  )"
+
+  printf '%s\n' "${version:-unknown}"
+}
+
+usage() {
+  cat <<'EOF'
+Usage: halo-status [--json | --report-out ABSOLUTE_PATH | --help | --version]
+
+Options:
+  --json                       Print public-safe JSON output.
+  --report-out ABSOLUTE_PATH   Write a public-safe runtime report.
+  -h, --help                   Show this help message.
+  --version                    Show the public release version.
+EOF
+}
+
+print_version() {
+  printf 'halo-status %s\n' "$(read_public_version)"
+}
+
 OUTPUT_MODE="human"
 REPORT_OUT=""
 
 if [ "$#" -eq 0 ]; then
   :
-elif [ "$#" -eq 1 ] && [ "${1:-}" = "--json" ]; then
-  OUTPUT_MODE="json"
+elif [ "$#" -eq 1 ]; then
+  case "${1:-}" in
+    --json)
+      OUTPUT_MODE="json"
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --version)
+      print_version
+      exit 0
+      ;;
+    --report-out)
+      echo "Error: --report-out requires a path." >&2
+      exit 2
+      ;;
+    *)
+      echo "Error: unsupported argument: ${1:-}" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
 elif [ "${1:-}" = "--report-out" ]; then
-  if [ "$#" -lt 2 ] || [ -z "${2:-}" ]; then
+  if [ -z "${2:-}" ]; then
     echo "Error: --report-out requires a path." >&2
     exit 2
   fi
@@ -22,6 +78,7 @@ elif [ "${1:-}" = "--report-out" ]; then
   REPORT_OUT="$2"
 else
   echo "Error: unsupported argument: ${1:-}" >&2
+  usage >&2
   exit 2
 fi
 

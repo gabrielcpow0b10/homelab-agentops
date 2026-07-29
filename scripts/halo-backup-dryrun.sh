@@ -1,6 +1,63 @@
 #!/usr/bin/env bash
 set -u
 
+SCRIPT_ROOT="$(
+  cd "$(dirname "${BASH_SOURCE[0]}")/.." &&
+  pwd
+)"
+
+read_public_version() {
+  local version
+
+  version="$(
+    sed -n \
+      's/^\*\*Current public release:\*\* \(v[0-9][0-9.]*\).*/\1/p' \
+      "$SCRIPT_ROOT/README.md" 2>/dev/null |
+    head -1 ||
+    true
+  )"
+
+  printf '%s\n' "${version:-unknown}"
+}
+
+usage() {
+  cat <<'EOF'
+Usage: halo-backup-dryrun [--help | --version]
+
+Options:
+  -h, --help   Show this help message.
+  --version    Show the public release version.
+EOF
+}
+
+print_version() {
+  printf 'halo-backup-dryrun %s\n' "$(read_public_version)"
+}
+
+if [ "$#" -eq 0 ]; then
+  :
+elif [ "$#" -eq 1 ]; then
+  case "${1:-}" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --version)
+      print_version
+      exit 0
+      ;;
+    *)
+      echo "Error: unsupported argument: ${1:-}" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+else
+  echo "Error: halo-backup-dryrun accepts at most one option." >&2
+  usage >&2
+  exit 2
+fi
+
 repo_root() {
   if command -v git >/dev/null 2>&1 && git rev-parse --show-toplevel >/dev/null 2>&1; then
     git rev-parse --show-toplevel
