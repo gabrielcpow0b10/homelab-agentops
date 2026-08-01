@@ -335,6 +335,8 @@ bats --tap tests/public-safety.bats
 
 The canonical public quality gate runs the same suite automatically.
 
+The gate also validates `docs/demo-output.md` against required public-safe markers so the sanitized demonstration cannot drift silently.
+
 ## Current status
 
 HomeLab AgentOps is active and evolving. v0.5.3 is the current public release: it adds enforceable configuration and documentation contracts, ShellCheck-backed validation, one canonical GitHub Actions workflow, and clearer diagnostics while preserving the public/private boundary.

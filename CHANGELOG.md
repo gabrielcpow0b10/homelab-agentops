@@ -12,6 +12,7 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 
 - Added a six-test Bats regression suite for non-destructive backup behavior and public security checks.
 - Added Bats as a blocking dependency of the canonical local and GitHub Actions quality gate.
+- Added a blocking demo-output contract that requires the sanitized demonstration to preserve its expected public-safe markers.
 
 ---
 
