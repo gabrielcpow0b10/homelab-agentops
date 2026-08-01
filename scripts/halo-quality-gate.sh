@@ -383,6 +383,34 @@ else
   fi
 fi
 
+section "Demo output contract"
+
+demo_output="$ROOT/docs/demo-output.md"
+demo_contract_failed=0
+
+if [ ! -f "$demo_output" ]; then
+  fail "Demo output file is missing"
+else
+  for marker in \
+    "HALO_PUBLIC_STATUS=GREEN" \
+    "Security scan result: GREEN" \
+    "Shell validation passed." \
+    "## Public-Safe Principle" \
+    "## What This Demo Proves"
+  do
+    marker_count="$(grep -cF -- "$marker" "$demo_output" || true)"
+
+    if [ "$marker_count" -ne 1 ]; then
+      fail "Demo output marker contract failed: $marker"
+      demo_contract_failed=1
+    fi
+  done
+
+  if [ "$demo_contract_failed" -eq 0 ]; then
+    pass "Demo output contract"
+  fi
+fi
+
 section "Runtime report bridge"
 
 runtime_report="$TMP_DIR/halo-runtime-public-safe-report.txt"
