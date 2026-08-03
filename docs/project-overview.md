@@ -71,4 +71,4 @@ It includes public-safe explanations, sanitized workflows, example scripts, and 
 
 ## Current public milestone
 
-The current public milestone is v0.5.3 Contract Enforcement. The focus is enforceable environment and documentation contracts, ShellCheck-backed Bash validation, one canonical GitHub Actions workflow, and stable public-safe diagnostics without exposing private HomeLab details.
+The current public milestone is v0.6.0 Agent-Ready. The focus is public-safe runtime reporting, structured JSON output, consistent CLI contracts, blocking regression tests, and sanitized demonstration validation without exposing private HomeLab details.

@@ -5,8 +5,8 @@
 ![Security](https://img.shields.io/badge/security-sanitized-green)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Raspberry%20Pi-lightgrey)
 
-**Current public release:** v0.5.3 - Contract Enforcement
-**Status:** Functional public toolkit for diagnostics, public-safe status reporting, backup dry runs, and safety validation
+**Current public release:** v0.6.0 - Agent-Ready
+**Status:** Agent-ready public toolkit for diagnostics, public-safe runtime reporting, JSON output, backup dry runs, regression testing, and safety validation
 **Focus:** Monitoring, backup, recovery, automation, secure remote operations, and future local AI agents
 **Author:** Gabriel Cruz
 
@@ -22,9 +22,9 @@ The public repository is designed to be reproducible without requiring access to
 
 ---
 
-## Current public release - v0.5.3
+## Current public release - v0.6.0
 
-v0.5.3 is the current public patch release. It adds enforceable environment and documentation contracts, ShellCheck-backed Bash validation, one canonical GitHub Actions workflow, and cleaner diagnostics while preserving the public/private boundary.
+v0.6.0 is the current public minor release. It adds a public-safe runtime report bridge, structured JSON output for status and doctor, consistent CLI help and version contracts, blocking Bats regression tests, and sanitized demo-output contract enforcement while preserving the public/private boundary.
 
 You can now run public-safe helper scripts:
 
@@ -339,7 +339,7 @@ The gate also validates `docs/demo-output.md` against required public-safe marke
 
 ## Current status
 
-HomeLab AgentOps is active and evolving. v0.5.3 is the current public release: it adds enforceable configuration and documentation contracts, ShellCheck-backed validation, one canonical GitHub Actions workflow, and clearer diagnostics while preserving the public/private boundary.
+HomeLab AgentOps is active and evolving. v0.6.0 is the current public release: it adds agent-ready runtime reporting, structured JSON output, consistent CLI contracts, blocking regression tests, and sanitized demo-output validation while preserving the public/private boundary.
 
 ---
 

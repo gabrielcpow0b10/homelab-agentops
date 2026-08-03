@@ -8,11 +8,23 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 
 ## Unreleased
 
+---
+
+## v0.6.0 - Agent-Ready
+
 ### Added
 
+- Added `--report-out ABSOLUTE_PATH` to `halo-status.sh` for public-safe runtime reports intended for future agent and HALO Console integration.
+- Added structured `--json` output to `halo-status.sh` and `halo-doctor.sh`.
+- Added consistent `-h`, `--help`, and `--version` contracts across the five public functional commands.
 - Added a six-test Bats regression suite for non-destructive backup behavior and public security checks.
 - Added Bats as a blocking dependency of the canonical local and GitHub Actions quality gate.
 - Added a blocking demo-output contract that requires the sanitized demonstration to preserve its expected public-safe markers.
+
+### Security
+
+- Restricted runtime reports to absolute, non-symbolic-link destinations with atomic writes, user-only permissions, bounded size, and public-safe marker validation.
+- Preserved blocking tests for repository-bound backup sources, synthetic credential detection, and forbidden runtime-file detection.
 
 ---
 
