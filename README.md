@@ -39,6 +39,8 @@ bash scripts/halo-security-scan.sh --strict
 
 For the fastest setup, see [QUICKSTART.md](QUICKSTART.md). For sanitized example output, see [docs/demo-output.md](docs/demo-output.md).
 
+For the verified v0.6.0 post-release maintenance record, see [docs/v0.6.0-post-release-maintenance.md](docs/v0.6.0-post-release-maintenance.md).
+
 Optional local install:
 
 ```bash

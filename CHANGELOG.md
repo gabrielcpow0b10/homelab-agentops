@@ -8,6 +8,10 @@ This changelog tracks the public GitHub `v0.x` release line. Private operational
 
 ## Unreleased
 
+### Documentation
+
+- Added a public-safe v0.6.0 post-release maintenance record covering validated branch cleanup, protected references, preserved release tags, and final repository validation.
+
 ---
 
 ## v0.6.0 - Agent-Ready
