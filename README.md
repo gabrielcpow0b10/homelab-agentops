@@ -10,6 +10,8 @@
 **Focus:** Monitoring, backup, recovery, automation, secure remote operations, and future local AI agents
 **Author:** Gabriel Cruz
 
+**Verified public proof:** `16/16 quality-gate checks` · `6/6 Bats regression tests` · `ShellCheck validation clean` · `Strict security scan GREEN`
+
 HomeLab AgentOps is a self-hosted infrastructure and operations project built to practice real-world Linux administration, Docker services, NAS-backed documentation, monitoring, backup/recovery workflows, safe automation, and private remote access.
 
 This repository is the **public and sanitized** version of a working private HomeLab. It documents the architecture, operational model, security posture, backup strategy, recovery strategy, and example workflows without exposing private credentials, real tokens, internal logs, real backup archives, or sensitive configuration files.
