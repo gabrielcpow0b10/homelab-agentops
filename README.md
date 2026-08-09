@@ -1,9 +1,10 @@
 # HomeLab AgentOps
 
-![Public Quality Gate](https://github.com/gabrielcpow0b10/homelab-agentops/actions/workflows/quality-gate.yml/badge.svg)
-![Status](https://img.shields.io/badge/status-public%20toolkit%20preview-blue)
+[![Public Quality Gate](https://github.com/gabrielcpow0b10/homelab-agentops/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/gabrielcpow0b10/homelab-agentops/actions/workflows/quality-gate.yml)
+[![Release](https://img.shields.io/badge/release-v0.6.0%20Agent--Ready-blue)](https://github.com/gabrielcpow0b10/homelab-agentops/releases/tag/v0.6.0)
 ![Security](https://img.shields.io/badge/security-sanitized-green)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Raspberry%20Pi-lightgrey)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 **Current public release:** v0.6.0 - Agent-Ready
 **Status:** Agent-ready public toolkit for diagnostics, public-safe runtime reporting, JSON output, backup dry runs, regression testing, and safety validation
