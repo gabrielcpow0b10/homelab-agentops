@@ -72,3 +72,5 @@ It includes public-safe explanations, sanitized workflows, example scripts, and 
 ## Current public milestone
 
 The current public milestone is v0.6.0 Agent-Ready. The focus is public-safe runtime reporting, structured JSON output, consistent CLI contracts, blocking regression tests, and sanitized demonstration validation without exposing private HomeLab details.
+
+The verified post-release maintenance and branch-cleanup record is documented in [v0.6.0-post-release-maintenance.md](v0.6.0-post-release-maintenance.md).
