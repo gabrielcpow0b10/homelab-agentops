@@ -22,6 +22,24 @@ HomeLab AgentOps is a local-first operations toolkit built from a real Raspberry
 
 The public repository is designed to be reproducible without requiring access to the private HomeLab, NAS, Tailscale network, secrets, logs, or production configuration.
 
+## Public-Safe Demo Output
+
+```text
+HomeLab AgentOps Public Repo
+
+Status: GREEN
+Security Scan: GREEN
+Strict Scan: GREEN
+Doctor: GREEN
+Shell Validation: GREEN
+Public release: v0.6.0 - Agent-Ready
+Current quality baseline: GREEN
+```
+
+This is sanitized demonstration output, not live telemetry. It shows the public validation model without exposing private network, host, credential, path, or runtime details.
+
+See [docs/demo-output.md](docs/demo-output.md) for the full sanitized demonstration.
+
 ---
 
 ## Current public release - v0.6.0
