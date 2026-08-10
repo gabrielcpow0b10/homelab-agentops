@@ -7,21 +7,12 @@
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 **Current public release:** v0.6.0 - Agent-Ready
-**Status:** Agent-ready public toolkit for diagnostics, public-safe runtime reporting, JSON output, backup dry runs, regression testing, and safety validation
-**Focus:** Monitoring, backup, recovery, automation, secure remote operations, and future local AI agents
-**Author:** Gabriel Cruz
 
 **Verified public proof:** `16/16 quality-gate checks` · `6/6 Bats regression tests` · `ShellCheck validation clean` · `Strict security scan GREEN`
 
 HomeLab AgentOps is a self-hosted infrastructure and operations project built to practice real-world Linux administration, Docker services, NAS-backed documentation, monitoring, backup/recovery workflows, safe automation, and private remote access.
 
 This repository is the **public and sanitized** version of a working private HomeLab. It documents the architecture, operational model, security posture, backup strategy, recovery strategy, and example workflows without exposing private credentials, real tokens, internal logs, real backup archives, or sensitive configuration files.
-
-## Portfolio Snapshot
-
-HomeLab AgentOps is a local-first operations toolkit built from a real Raspberry Pi 8GB HomeLab environment. It demonstrates public-safe infrastructure documentation, diagnostics, backup dry-run workflows, shell validation, repository safety checks, and clear public/private separation.
-
-The public repository is designed to be reproducible without requiring access to the private HomeLab, NAS, Tailscale network, secrets, logs, or production configuration.
 
 ## Public-Safe Demo Output
 
@@ -136,18 +127,6 @@ Agents          Kiosk View         Recovery     Ollama/Open WebUI
 - NAS-safe monitoring behavior to avoid waking storage unnecessarily
 - Public/private documentation separation
 - Preparation for local agents and AI-assisted operations
-
----
-
-## Current capabilities
-
-- Run public-safe HomeLab diagnostics with `halo-doctor`.
-- Run repository safety checks with `halo-security-scan`.
-- Install helper commands locally with `install.sh`.
-- Run the canonical blocking repository validation with `halo-quality-gate`.
-- Validate public safety automatically through GitHub Actions.
-- Document NAS-safe monitoring, backup/recovery, Telegram gateway design, and rack dashboard concepts.
-- Keep a clear boundary between private HomeLab operations and public portfolio-safe documentation.
 
 ---
 
@@ -360,12 +339,6 @@ The canonical public quality gate runs the same suite automatically.
 
 The gate also validates `docs/demo-output.md` against required public-safe markers so the sanitized demonstration cannot drift silently.
 
-## Current status
-
-HomeLab AgentOps is active and evolving. v0.6.0 is the current public release: it adds agent-ready runtime reporting, structured JSON output, consistent CLI contracts, blocking regression tests, and sanitized demo-output validation while preserving the public/private boundary.
-
----
-
 ## Main learning outcomes
 
 This project demonstrates how a small HomeLab can grow into a serious infrastructure learning platform when it is:
@@ -387,61 +360,26 @@ Physics graduate, Computer Science student, and HomeLab / local AI systems build
 
 ## Who is this for?
 
-HomeLab AgentOps is designed for:
+HomeLab AgentOps is useful for self-hosters, students, Raspberry Pi users, and developers learning Linux, DevOps, automation, monitoring, backup/recovery, and local AI infrastructure.
 
-- self-hosters building small private infrastructure
-- students learning Linux, DevOps, automation, and secure operations
-- Raspberry Pi users running monitoring or dashboard nodes
-- HomeLab builders who want safer backup and recovery habits
-- developers preparing for local AI infrastructure
-- people interested in public-safe automation patterns
+The repository is intentionally public-safe and sanitized. See [Public vs private boundary](#public-vs-private-boundary) and [SECURITY.md](SECURITY.md) for the security model.
 
-The public repository is intentionally sanitized. It demonstrates operational structure, diagnostics, security checks, and recovery discipline without exposing private infrastructure.
+## Quick public toolkit commands
 
-## Public Toolkit Commands
+```bash
+bash scripts/halo-quality-gate.sh
+bash scripts/halo-status.sh
+bash scripts/halo-backup-dryrun.sh
+bash scripts/halo-security-scan.sh --strict
+bash scripts/halo-doctor.sh
+```
 
-The public toolkit includes safe commands that can be tested without private HomeLab access.
+These commands are designed to work without private HomeLab credentials, private network details, or production configuration.
 
-    bash scripts/halo-quality-gate.sh
-    bash scripts/halo-status.sh
-    bash scripts/halo-backup-dryrun.sh
-    bash scripts/halo-security-scan.sh --strict
-    bash scripts/halo-doctor.sh
+Expected public-safe markers include:
 
-The status and backup dry-run scripts are public-safe by design:
-
-- no real NAS paths required
-- no Telegram tokens required
-- no private IPs required
-- no `.env` files required
-- no production backup is created
-- no destructive action is performed
-
-Status command result:
-
-- `HALO_PUBLIC_STATUS=GREEN` means no local warnings were detected.
-- `HALO_PUBLIC_STATUS=WARN` means a local condition requires review.
-
-Other expected public-safe results:
-
-    HALO_BACKUP_DRYRUN=OK
-    Security scan result: GREEN
-
-## Public / Private Boundary
-
-This repository must not include private operational data.
-
-Keep private:
-
-- real `.env` files
-- Telegram bot tokens
-- chat IDs
-- NAS credentials
-- private IP maps
-- SSH keys
-- production logs
-- real backup archives
-- private screenshots
-- internal-only runbooks
-
-Use public-safe examples and placeholders instead.
+```text
+HALO_PUBLIC_STATUS=GREEN
+HALO_BACKUP_DRYRUN=OK
+Security scan result: GREEN
+```
