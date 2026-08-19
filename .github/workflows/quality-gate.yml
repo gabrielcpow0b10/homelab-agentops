@@ -19,12 +19,12 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Install ShellCheck and Bats
+      - name: Prepare ShellCheck and Bats
         run: |
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends --yes \
-            bats \
-            shellcheck
+          shellcheck --version
+          npm install --prefix "$RUNNER_TEMP/bats" --no-audit --no-fund bats@1.10.0
+          echo "$RUNNER_TEMP/bats/node_modules/.bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/bats/node_modules/.bin/bats" --version
 
       - name: Run public quality gate
         run: bash scripts/halo-quality-gate.sh
