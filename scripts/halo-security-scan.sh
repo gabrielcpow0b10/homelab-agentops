@@ -4,7 +4,7 @@
 # Safe for public CI. Scans for real secret leaks, private paths,
 # private network details, and forbidden runtime files.
 
-set -u
+set -euo pipefail
 
 SCRIPT_ROOT="$(
   cd "$(dirname "${BASH_SOURCE[0]}")/.." &&
