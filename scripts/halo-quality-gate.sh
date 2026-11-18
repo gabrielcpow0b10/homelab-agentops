@@ -105,6 +105,20 @@ run_with_marker() {
 echo "HomeLab AgentOps Public Quality Gate"
 echo "===================================="
 
+section "Public security"
+
+run_with_marker \
+  "Strict public security scan" \
+  "Security scan result: GREEN" \
+  bash scripts/halo-security-scan.sh --strict
+
+# Later checks can print source excerpts. Stop here if the tree is sensitive
+# or the scan could not finish.
+if [ "$failed" -ne 0 ]; then
+  echo "HALO_QUALITY_GATE=RED"
+  exit 1
+fi
+
 section "Required public files"
 
 required_files=(
@@ -331,13 +345,6 @@ else
   fail "No active legacy Beta references"
   printf '%s\n' "$legacy_references" | sed 's/^/  /'
 fi
-
-section "Public security"
-
-run_with_marker \
-  "Strict public security scan" \
-  "Security scan result: GREEN" \
-  bash scripts/halo-security-scan.sh --strict
 
 section "Backup dry-run"
 

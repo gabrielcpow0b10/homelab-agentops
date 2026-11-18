@@ -101,10 +101,20 @@ teardown() {
     "$secret_value" \
     >"$SECRET_FIXTURE"
 
+  # Construct synthetic values at runtime so the suite itself scans cleanly.
+  private_network="192.168"".42.19"
+  private_path="/Users""/regression-fixture"
+  printf '%s\n' "$private_network" "$private_path" >>"$SECRET_FIXTURE"
+
   run bash "$SECURITY_SCRIPT" --strict
 
   [ "$status" -eq 1 ]
-  [[ "$output" == *".halo-bats-secret-fixture.txt"* ]]
+  for line_number in 1 2 3; do
+    [[ "$output" == *".halo-bats-secret-fixture.txt:$line_number"* ]]
+  done
+  [[ "$output" != *"$secret_value"* ]]
+  [[ "$output" != *"$private_network"* ]]
+  [[ "$output" != *"$private_path"* ]]
   [[ "$output" == *"Secret assignment scan: REVIEW REQUIRED"* ]]
   [[ "$output" == *"Security scan result: REVIEW REQUIRED"* ]]
 
