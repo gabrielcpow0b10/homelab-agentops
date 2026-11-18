@@ -102,49 +102,41 @@ PRIVATE_NET_REGEX='(^|[^0-9])(10\.[0-9]{1,3}\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[
 
 PRIVATE_PATH_REGEX='/home/[A-Za-z0-9._-]+|/Users/[A-Za-z0-9._-]+|/mnt/homelab|HomeLab_Control_Center'
 
-echo "===== Secret assignment scan ====="
-SECRET_HITS="$(
-  grep -RInIE "${COMMON_GREP_EXCLUDES[@]}" "$SECRET_REGEX" . 2>/dev/null \
-    | grep -Evi "$PLACEHOLDER_FILTER" || true
-)"
+# Keep matching content inside the filter. The public CI log only needs the
+# repository-relative filename and line number to locate a finding.
+scan_text() {
+  local label="$1" pattern="$2" ignore_pattern="${3:-}"
+  local locations
 
-if [ -n "$SECRET_HITS" ]; then
-  echo "$SECRET_HITS"
-  echo "Secret assignment scan: REVIEW REQUIRED"
-  mark_fail
-else
-  echo "Secret assignment scan: OK"
-fi
+  echo "===== $label ====="
+  if ! locations="$(
+    { grep -rnHIE --null "${COMMON_GREP_EXCLUDES[@]}" "$pattern" . 2>/dev/null || [ "$?" -eq 1 ]; } |
+      (
+        shopt -s nocasematch
+        while IFS= read -r -d '' file && IFS= read -r match; do
+          if [[ -n "$ignore_pattern" && "${match#*:}" =~ $ignore_pattern ]]; then
+            continue
+          fi
+          printf '%q:%s\n' "$file" "${match%%:*}"
+        done
+      )
+  )"; then
+    echo "$label: scan incomplete"
+    mark_fail
+  elif [ -n "$locations" ]; then
+    printf '%s\n' "$locations"
+    echo "$label: REVIEW REQUIRED"
+    mark_fail
+  else
+    echo "$label: OK"
+  fi
+  echo
+}
 
-echo
-echo "===== Private network scan ====="
-PRIVATE_NET_HITS="$(
-  grep -RInIE "${COMMON_GREP_EXCLUDES[@]}" "$PRIVATE_NET_REGEX" . 2>/dev/null || true
-)"
+scan_text "Secret assignment scan" "$SECRET_REGEX" "$PLACEHOLDER_FILTER"
+scan_text "Private network scan" "$PRIVATE_NET_REGEX"
+scan_text "Private path scan" "$PRIVATE_PATH_REGEX"
 
-if [ -n "$PRIVATE_NET_HITS" ]; then
-  echo "$PRIVATE_NET_HITS"
-  echo "Private network scan: REVIEW REQUIRED"
-  mark_fail
-else
-  echo "Private network scan: OK"
-fi
-
-echo
-echo "===== Private path scan ====="
-PRIVATE_PATH_HITS="$(
-  grep -RInIE "${COMMON_GREP_EXCLUDES[@]}" "$PRIVATE_PATH_REGEX" . 2>/dev/null || true
-)"
-
-if [ -n "$PRIVATE_PATH_HITS" ]; then
-  echo "$PRIVATE_PATH_HITS"
-  echo "Private path scan: REVIEW REQUIRED"
-  mark_fail
-else
-  echo "Private path scan: OK"
-fi
-
-echo
 echo "===== Forbidden runtime file scan ====="
 FORBIDDEN_FILES="$(
   find . -path ./.git -prune -o -type f \( \
