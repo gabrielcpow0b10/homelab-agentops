@@ -48,6 +48,14 @@ teardown() {
   [[ "$output" == *"Source safety: inside repository"* ]]
   [[ "$output" == *"HALO_BACKUP_DRYRUN=OK"* ]]
   [[ "$output" == *"No files copied."* ]]
+
+  # The source from the example environment resolves against the toolkit.
+  cd "$BATS_TEST_TMPDIR"
+  run env HALO_BACKUP_SOURCE=. bash "$BACKUP_SCRIPT"
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"HALO_BACKUP_DRYRUN=OK"* ]]
+  [[ "$output" == *"scripts/halo-backup-dryrun.sh"* ]]
+  [[ "$output" != *"$REPO_ROOT/"* ]]
 }
 
 @test "backup dry-run refuses a source outside the repository" {
@@ -62,7 +70,12 @@ teardown() {
   [[ "$output" == *"Source safety: outside repository"* ]]
   [[ "$output" == *"Refusing to preview files outside the repository"* ]]
   [[ "$output" == *"HALO_BACKUP_DRYRUN=REFUSED_OUTSIDE_REPO"* ]]
+  [[ "$output" != *"$OUTSIDE_SOURCE"* ]]
   [[ "$output" == *"No files copied."* ]]
+
+  run env HALO_BACKUP_SOURCE=.git bash "$BACKUP_SCRIPT"
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"HALO_BACKUP_DRYRUN=REFUSED_REPO_METADATA"* ]]
 }
 
 @test "backup dry-run never creates the requested target" {
@@ -75,6 +88,8 @@ teardown() {
 
   [ "$status" -eq 0 ]
   [[ "$output" == *"HALO_BACKUP_DRYRUN=OK"* ]]
+  [[ "$output" == *"Custom destination configured (path hidden)"* ]]
+  [[ "$output" != *"$BACKUP_TARGET"* ]]
   [ ! -e "$BACKUP_TARGET" ]
 }
 
